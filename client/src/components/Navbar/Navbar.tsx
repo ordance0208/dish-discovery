@@ -1,7 +1,11 @@
 import { makeStyles } from '@mui/styles';
-import { WHITE, TEXT_DARK } from '../../theme';
+import { WHITE } from '../../theme';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
+import IconButton from '../IconButton'
+import { UilSun, UilMoon } from '@iconscout/react-unicons';
+import { useContext } from 'react';
+import { ThemeColorContext } from '../../theme';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -11,6 +15,7 @@ const useStyles = makeStyles((theme: any) => ({
     width: '100vw',
     padding: '16px 0',
     borderBottom: '1px solid #f7f7f7',
+    background: theme.palette.background.default,
   },
   header: {
     maxWidth: 1440,
@@ -32,19 +37,24 @@ const useStyles = makeStyles((theme: any) => ({
       textDecoration: 'none',
       fontFamily: 'Roboto, sans-serif',
       fontWeight: 500,
-      color: TEXT_DARK,
+      color: theme.palette.text.primary,
     },
-    '&  a:last-child': {
+    '&  a:nth-child(5)': {
       background: theme.palette.primary.main,
       padding: '8px 16px',
       borderRadius: 18,
       color: WHITE,
     },
   },
+  iconMoon: {
+    color: theme.palette.text.primary
+  }
 }));
 
 const Navbar = () => {
   const classes = useStyles();
+
+  const {colorMode, toggleColorMode} = useContext(ThemeColorContext);
 
   return (
     <>
@@ -57,6 +67,9 @@ const Navbar = () => {
             <Link to='/about'>About</Link>
             <Link to='/signin'>Sign In</Link>
             <Link to='/signup'>Sign Up</Link>
+            <IconButton onClick={toggleColorMode}>
+              {colorMode === 'light' ? <UilMoon className={classes.iconMoon}/> : <UilSun color={WHITE}/>}
+            </IconButton>
           </nav>
         </div>
       </header>

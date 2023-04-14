@@ -1,7 +1,21 @@
-const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+import Typography from '../../components/Typography';
 
-export default Home
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: any) => ({
+  text: {
+    color: theme.palette.text.primary,
+  },
+}));
+
+const Home = () => {
+  const classes = useStyles();
+
+  return (
+    <div>
+      <Typography className={classes.text}>Test</Typography>
+    </div>
+  );
+};
+
+export default Home;
