@@ -4,15 +4,19 @@ import { useState, createContext, useMemo } from 'react';
 export const WHITE = '#FFFFFF';
 export const MAIN = '#23CE6B';
 export const TEXT_DARK = '#50514F';
+export const NEUTRAL = '#f7f7f7';
 export const BACKGROUND_LIGHT = '#FAFAFA';
 export const BACKGROUND_DARK = '#444444';
 
 type ThemeContextType = {
-  colorMode: string
-  toggleColorMode: () => void
-}
+  colorMode: string;
+  toggleColorMode: () => void;
+};
 
-export const ThemeColorContext = createContext<ThemeContextType>({ colorMode: 'light', toggleColorMode: () => {} });
+export const ThemeColorContext = createContext<ThemeContextType>({
+  colorMode: 'light',
+  toggleColorMode: () => {},
+});
 
 const designTheme = (mode: string): ThemeOptions => ({
   palette: {
@@ -38,6 +42,15 @@ const designTheme = (mode: string): ThemeOptions => ({
           },
         }),
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 650,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
 });
 
 const ThemeColorProvider = ({ children }: any) => {
@@ -49,8 +62,10 @@ const ThemeColorProvider = ({ children }: any) => {
 
   const theme = useMemo(() => createTheme(designTheme(colorMode)), [colorMode]);
 
+  document.body.style.background = colorMode === 'dark' ? '#242323' : '#F3F3F3';
+
   return (
-    <ThemeColorContext.Provider value={{colorMode, toggleColorMode}}>
+    <ThemeColorContext.Provider value={{ colorMode, toggleColorMode }}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ThemeColorContext.Provider>
   );

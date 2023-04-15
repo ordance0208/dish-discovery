@@ -1,24 +1,31 @@
+import { useState } from 'react';
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
 import { Link } from 'react-router-dom';
+import { menuPaths } from '../../utils/navbar.helpers';
+import { Path } from '../../models/path';
+import HamburgerButton from '../HamburgerButton';
+import MobileMenu from '../MobileMenu';
+import ThemeToggleButton from '../ThemeToggleButton/ThemeToggleButton';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
-import IconButton from '../IconButton'
-import { UilSun, UilMoon } from '@iconscout/react-unicons';
-import { useContext } from 'react';
-import { ThemeColorContext } from '../../theme';
 
-const useStyles = makeStyles((theme: any) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: 'fixed',
     top: 0,
     left: 0,
     width: '100vw',
     padding: '16px 0',
-    borderBottom: '1px solid #f7f7f7',
+    borderBottom: '1px solid #f3f3f3',
     background: theme.palette.background.default,
+    zIndex: 10,
   },
   header: {
     maxWidth: 1440,
+    [theme.breakpoints.down('xl')]: {
+      width: '90%',
+    },
     margin: 'auto',
     display: 'flex',
     alignItems: 'center',
@@ -29,6 +36,9 @@ const useStyles = makeStyles((theme: any) => ({
     height: 'auto',
   },
   nav: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
     display: 'flex',
     gap: 18,
     alignItems: 'center',
@@ -36,25 +46,37 @@ const useStyles = makeStyles((theme: any) => ({
       display: 'inline-block',
       textDecoration: 'none',
       fontFamily: 'Roboto, sans-serif',
-      fontWeight: 500,
+      fontWeight: 600,
       color: theme.palette.text.primary,
     },
-    '&  a:nth-child(5)': {
+    '& a:nth-child(5)': {
       background: theme.palette.primary.main,
       padding: '8px 16px',
       borderRadius: 18,
       color: WHITE,
+      transition: '400ms all',
+      '&:hover': {
+        background: theme.palette.primary.dark,
+      },
     },
   },
   iconMoon: {
-    color: theme.palette.text.primary
-  }
+    color: theme.palette.text.primary,
+  },
+  iconMoonSpecial: {
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+    },
+  },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
 
-  const {colorMode, toggleColorMode} = useContext(ThemeColorContext);
+  const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
   return (
     <>
@@ -62,18 +84,23 @@ const Navbar = () => {
         <div className={classes.header}>
           <img className={classes.logo} src={logo} />
           <nav className={classes.nav}>
-            <Link to='/home'>Home</Link>
-            <Link to='/recipes'>Recipes</Link>
-            <Link to='/about'>About</Link>
-            <Link to='/signin'>Sign In</Link>
-            <Link to='/signup'>Sign Up</Link>
-            <IconButton onClick={toggleColorMode}>
-              {colorMode === 'light' ? <UilMoon className={classes.iconMoon}/> : <UilSun color={WHITE}/>}
-            </IconButton>
+            {menuPaths.map(({ to, label }: Path) => (
+              <Link to={to}>{label}</Link>
+            ))}
+            <ThemeToggleButton />
           </nav>
+          <div className={classes.iconMoonSpecial}>
+            <ThemeToggleButton />
+            <HamburgerButton
+              menuOpened={menuOpened}
+              setMenuOpened={setmenuOpened}
+            />
+          </div>
         </div>
       </header>
-      <div style={{ width: '100%', height: '70px' }}></div>
+      <div style={{ width: '100%', height: '70px', position: 'relative' }}>
+        <MobileMenu menuOpened={menuOpened} paths={menuPaths} />
+      </div>
     </>
   );
 };

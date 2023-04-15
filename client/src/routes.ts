@@ -1,12 +1,12 @@
-const AUTH = {
+const AUTH_PATHS = {
   LOGIN: '/login',
-	REGISTER: '/register'
+  REGISTER: '/register',
 };
 
-const APP = {
-	HOME: '/home',
-	RECIPES: '/recipes',
-	ABOUT: '/about'
-}
+const PATHS = {
+  HOME: '/home',
+  RECIPES: '/recipes',
+  ABOUT: '/about',
+};
 
-export { AUTH };
+export { AUTH_PATHS, PATHS };

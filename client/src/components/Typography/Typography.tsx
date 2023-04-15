@@ -1,7 +1,7 @@
 import { Typography as MuiTypography } from '@mui/material';
 
 interface Props {
-	children: string
+	children?: string
 	className?: string
 }
 

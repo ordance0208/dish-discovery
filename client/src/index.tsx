@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
+import { StyledEngineProvider } from '@mui/material/styles';
 import ThemeColorProvider, { theme } from './theme';
 import './App.css';
 // import ThemeColorProvider from './theme';
@@ -13,10 +13,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      {/* <ThemeProvider theme={theme}>
-      </ThemeProvider> */}
       <ThemeColorProvider>
-        <App />
+        <StyledEngineProvider injectFirst>
+          <App />
+        </StyledEngineProvider>
       </ThemeColorProvider>
     </Router>
   </React.StrictMode>
