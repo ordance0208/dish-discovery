@@ -29,7 +29,8 @@ const useStyles = makeStyles({
       borderRadius: 4,
       fontWeight: 600,
       padding: '12px 0',
-      color: WHITE
+      color: WHITE,
+      fontSize: 16
     },
   },
 });
