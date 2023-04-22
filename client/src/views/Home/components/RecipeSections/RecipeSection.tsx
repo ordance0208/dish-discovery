@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme: any) => ({
   recipeContainer: {
     display: 'grid',
     // alignItems: 'center',
-		gridTemplateColumns: 'repeat(auto-fit, 250px)',
-    gap: 32,
+		gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: 48,
     // height: 410,
   },
 }));

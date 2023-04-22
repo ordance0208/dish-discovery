@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { Collapse, Theme } from '@mui/material';
@@ -10,6 +11,7 @@ type Path = {
 interface Props {
   menuOpened: boolean;
   paths: Path[];
+  setMenuOpened: Dispatch<SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,17 +41,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'absolute',
     top: '100%',
     left: 0,
+    zIndex: 1500,
     width: '100%',
   },
 }));
 
-const MobileMenu = ({ menuOpened, paths }: Props) => {
+const MobileMenu = ({ menuOpened, paths, setMenuOpened }: Props) => {
   const classes = useStyles();
 
   return (
     <Collapse in={menuOpened} className={classes.mobileMenuContianer}>
       {paths.map(({ to, label }: Path) => (
-        <div className={classes.mobileMenuLinks} key={to}>
+        <div className={classes.mobileMenuLinks} onClick={() => setMenuOpened(false)}  key={to}>
           <Link to={to}>
             {label.charAt(0).toUpperCase() + label.substring(1)}
           </Link>

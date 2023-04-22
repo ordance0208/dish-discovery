@@ -6,7 +6,7 @@ export const MAIN = '#23CE6B';
 export const TEXT_DARK = '#50514F';
 export const NEUTRAL = '#f7f7f7';
 export const BACKGROUND_LIGHT = '#FAFAFA';
-export const BACKGROUND_DARK = '#444444';
+export const BACKGROUND_DARK = '#333333';
 
 type ThemeContextType = {
   colorMode: string;

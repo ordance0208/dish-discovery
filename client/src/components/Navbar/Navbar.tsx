@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& a:nth-child(5)': {
       background: theme.palette.primary.main,
       padding: '8px 16px',
-      borderRadius: 18,
+      borderRadius: 4,
       color: WHITE,
       transition: '400ms all',
       '&:hover': {
@@ -85,12 +85,14 @@ const Navbar = () => {
           <img className={classes.logo} src={logo} />
           <nav className={classes.nav}>
             {menuPaths.map(({ to, label }: Path) => (
-              <Link to={to}>{label}</Link>
+              <Link to={to} key={to}>
+                {label}
+              </Link>
             ))}
-            <ThemeToggleButton />
+            {/* <ThemeToggleButton /> */}
           </nav>
           <div className={classes.iconMoonSpecial}>
-            <ThemeToggleButton />
+            {/* <ThemeToggleButton /> */}
             <HamburgerButton
               menuOpened={menuOpened}
               setMenuOpened={setmenuOpened}
@@ -99,7 +101,7 @@ const Navbar = () => {
         </div>
       </header>
       <div style={{ width: '100%', height: '70px', position: 'relative' }}>
-        <MobileMenu menuOpened={menuOpened} paths={menuPaths} />
+        <MobileMenu menuOpened={menuOpened} setMenuOpened={setmenuOpened} paths={menuPaths} />
       </div>
     </>
   );

@@ -1,8 +1,8 @@
 import { Typography as MuiTypography } from '@mui/material';
 
 interface Props {
-	children?: string
-	className?: string
+  children?: any;
+  className?: string;
 }
 
 const Typography = ({ children, className }: Props) => {

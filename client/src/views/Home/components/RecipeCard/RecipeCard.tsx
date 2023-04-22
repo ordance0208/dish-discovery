@@ -6,10 +6,10 @@ import { Avatar } from '@mui/material';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
-    width: 250,
+    // width: 250,
     height: '100%',
     boxShadow: '0 0 6px 0 rgba(0, 0, 0, 0.3)',
-    borderRadius: 4,
+    // borderRadius: 8,
     '&:hover': {
       cursor: 'pointer',
       '& $image': {
@@ -25,15 +25,15 @@ const useStyles = makeStyles((theme: any) => ({
   imageContainer: {
     width: '100%',
     height: '60%',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    // borderTopLeftRadius: 8,
+    // borderTopRightRadius: 8,
     overflow: 'hidden',
   },
   image: {
     width: '100%',
     height: '100%',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    // borderTopLeftRadius: 8,
+    // borderTopRightRadius: 8,
     objectFit: 'cover',
     transition: 'transform 400ms',
     userDrag: 'none',

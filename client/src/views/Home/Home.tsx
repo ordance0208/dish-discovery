@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme: any) => ({
   home: {
     maxWidth: 1440,
     [theme.breakpoints.down('xl')]: {
-      width: '60%',
+      width: '90%',
     },
     margin: '0 auto',
     paddingTop: 0,    
