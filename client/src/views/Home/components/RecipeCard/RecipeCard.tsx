@@ -1,8 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import hamburger from '../../../../assets/img/hamburger.jpeg';
 import Typography from '../../../../components/Typography';
-import { UilUser, UilEye, UilHeart, UilClock } from '@iconscout/react-unicons';
-import { Avatar } from '@mui/material';
+import { UilClock } from '@iconscout/react-unicons';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -70,7 +69,7 @@ const RecipeCard = () => {
   return (
     <div className={classes.root}>
       <div className={classes.imageContainer}>
-        <img src={hamburger} className={classes.image} />
+        <img src={hamburger} className={classes.image} alt="recipe"/>
       </div>
       <div className={classes.cardBody}>
         <div className={classes.cookingTime}>

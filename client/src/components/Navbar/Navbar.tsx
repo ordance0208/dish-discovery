@@ -7,7 +7,6 @@ import { menuPaths } from '../../utils/navbar.helpers';
 import { Path } from '../../models/path';
 import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
-import ThemeToggleButton from '../ThemeToggleButton/ThemeToggleButton';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -82,7 +81,7 @@ const Navbar = () => {
     <>
       <header className={classes.root}>
         <div className={classes.header}>
-          <img className={classes.logo} src={logo} />
+          <img className={classes.logo} src={logo} alt="navbar logo"/>
           <nav className={classes.nav}>
             {menuPaths.map(({ to, label }: Path) => (
               <Link to={to} key={to}>
