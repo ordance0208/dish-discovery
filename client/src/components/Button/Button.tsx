@@ -1,6 +1,5 @@
 import { Button as MuiButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { clsx } from 'clsx';
 import { WHITE } from '../../theme';
 
 type ButtonProps = {

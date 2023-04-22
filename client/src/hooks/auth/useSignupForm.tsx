@@ -23,6 +23,7 @@ const useSignupForm = () => {
       .required('Please enter your email address'),
     password: Yup.string()
       .matches(
+        // eslint-disable-next-line
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
         'The password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and a special character'
       )
