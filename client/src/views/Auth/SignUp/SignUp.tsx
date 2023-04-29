@@ -7,6 +7,7 @@ import PasswordField from '../../../components/PasswordField';
 import Button from '../../../components/Button';
 import Typography from '../../../components/Typography';
 import AuthView from '../../../components/AuthView';
+import { useAuthData } from '../../../utils/AuthContext/selectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   signupForm: {
@@ -42,6 +43,7 @@ const SignUp = () => {
   const classes = useStyles();
 
   const { initialValues, validationSchema, handleSignup } = useSignupForm();
+  const { loading } = useAuthData()
 
   return (
     <AuthView
@@ -69,7 +71,7 @@ const SignUp = () => {
           <TextField label='Email address' name='email' type='email' required />
           <PasswordField name='password' label='Password' />
           <PasswordField name='confirmPassword' label='Confirm password' />
-          <Button onClick={props.handleSubmit}>Sign Up</Button>
+          <Button disabled={loading} onClick={props.handleSubmit}>Sign Up</Button>
           <Typography className={classes.haveAccount}>
             Already have an account?{' '}
             <Link to='/login' className={classes.signinLink}>
