@@ -1,6 +1,10 @@
 import * as Yup from 'yup';
+import { RegisterFields } from '../../models/authPayloads';
+import { useAuthActions } from '../../utils/AuthContext/actions';
 
 const useSignupForm = () => {
+  const { registerUser } = useAuthActions()
+
   const initialValues = {
     firstName: '',
     lastName: '',
@@ -33,8 +37,8 @@ const useSignupForm = () => {
       .oneOf([Yup.ref('password')], "Passwords don't match"),
   });
 
-  const handleSignup = (values: any) => {
-    console.log({ values });
+  const handleSignup = (values: RegisterFields) => {
+    registerUser(values)
   };
 
   return {
