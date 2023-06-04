@@ -1,11 +1,23 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import PublicRoute from './utils/PublicRoute';
+import { useAuthActions } from './utils/AuthContext/actions';
 import { PATHS, AUTH_PATHS } from './routes';
+import PublicRoute from './utils/PublicRoute';
 import Home from './views/Home';
 import SignUp from './views/Auth/SignUp';
 import SignIn from './views/Auth/SignIn';
 
 const Router = () => {
+  const { getCurrentUser } = useAuthActions()
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if(token) {
+      getCurrentUser()
+    }
+  }, [])
+
   return (
     <Routes>
       <Route path={PATHS.HOME} element={<Home />} />
