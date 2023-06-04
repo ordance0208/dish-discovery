@@ -1,12 +1,11 @@
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import { RegisterFields } from '../../models/authPayloads';
 import { useAuthActions } from '../../utils/AuthContext/actions';
-import { useNavigate } from 'react-router-dom';
 import { PATHS } from '../../routes';
 
 const useSignupForm = () => {
   const { registerUser } = useAuthActions();
-
   const navigate = useNavigate();
 
   const initialValues = {
