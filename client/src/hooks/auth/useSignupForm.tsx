@@ -1,9 +1,13 @@
 import * as Yup from 'yup';
 import { RegisterFields } from '../../models/authPayloads';
 import { useAuthActions } from '../../utils/AuthContext/actions';
+import { useNavigate } from 'react-router-dom';
+import { PATHS } from '../../routes';
 
 const useSignupForm = () => {
-  const { registerUser } = useAuthActions()
+  const { registerUser } = useAuthActions();
+
+  const navigate = useNavigate();
 
   const initialValues = {
     firstName: '',
@@ -37,8 +41,13 @@ const useSignupForm = () => {
       .oneOf([Yup.ref('password')], "Passwords don't match"),
   });
 
-  const handleSignup = (values: RegisterFields) => {
-    registerUser(values)
+  const handleSignup = async (values: RegisterFields) => {
+    try {
+      await registerUser(values);
+      navigate(PATHS.HOME, { replace: true });
+    } catch (err: any) {
+      console.log(err);
+    }
   };
 
   return {
