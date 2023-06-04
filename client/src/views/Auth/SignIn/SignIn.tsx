@@ -49,7 +49,12 @@ const SignIn = () => {
             required
           />
           <PasswordField name='password' />
-          <Button onClick={props.handleSubmit} fullWidth type='submit' disabled={props.isSubmitting}>
+          <Button
+            onClick={props.handleSubmit}
+            fullWidth
+            type='submit'
+            disabled={props.isSubmitting}
+          >
             Sign in
           </Button>
           <Typography className={classes.noAccount}>
