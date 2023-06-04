@@ -19,24 +19,38 @@ export const authReducer = (state: State, action: Action<any>): State => {
       return { ...state, loading: true };
     }
     case types.SIGN_UP_SUCCESS: {
-      return { user: action.payload, loading: false };
+      localStorage.setItem('token', action.payload?.token);
+      return { user: action.payload?.user, loading: false };
     }
     case types.SIGN_UP_FAIL: {
       return { ...state, loading: false };
     }
 
-		// Sign in cases
+    // Sign in cases
     case types.SIGN_IN: {
       return { ...state, loading: true };
     }
     case types.SIGN_IN_SUCCESS: {
-      return { user: action.payload, loading: false };
+      localStorage.setItem('token', action.payload?.token);
+      return { user: action.payload?.user, loading: false };
     }
     case types.SIGN_IN_FAIL: {
       return { ...state, loading: false };
     }
 
-		// Sign out cases
+    // Get current user
+    case types.GET_CURRENT_USER: {
+      return { ...state, loading: true };
+    }
+    case types.GET_CURRENT_USER_SUCCESS: {
+      return { ...state, user: action.payload, loading: false };
+    }
+    case types.GET_CURRENT_USER_FAIL: {
+      localStorage.removeItem('token');
+      return { ...state, user: null, loading: false };
+    }
+
+    // Sign out cases
     case types.SIGN_OUT: {
       return { ...state, loading: true };
     }
@@ -47,7 +61,7 @@ export const authReducer = (state: State, action: Action<any>): State => {
       return { ...state, loading: false };
     }
     default: {
-      return state
+      return state;
     }
   }
 };
