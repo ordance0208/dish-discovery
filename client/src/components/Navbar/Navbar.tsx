@@ -78,6 +78,8 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
+  const { loading } = useAuthData()
+
   return (
     <>
       <header className={classes.root}>
