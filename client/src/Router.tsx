@@ -16,6 +16,7 @@ const Router = () => {
     if(token) {
       getCurrentUser()
     }
+    // eslint-disable-next-line
   }, [])
 
   return (
