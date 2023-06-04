@@ -1,12 +1,12 @@
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 import useSigninForm from '../../../hooks/auth/useSigninForm';
 import AuthView from '../../../components/AuthView';
 import TextField from '../../../components/TextField';
 import PasswordField from '../../../components/PasswordField';
 import Button from '../../../components/Button';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
 import Typography from '../../../components/Typography';
-import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => ({
   signinForm: {
@@ -49,7 +49,7 @@ const SignIn = () => {
             required
           />
           <PasswordField name='password' />
-          <Button onClick={props.handleSubmit} fullWidth>
+          <Button onClick={props.handleSubmit} fullWidth type='submit' disabled={props.isSubmitting}>
             Sign in
           </Button>
           <Typography className={classes.noAccount}>
