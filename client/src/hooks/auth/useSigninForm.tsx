@@ -1,6 +1,12 @@
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { useAuthActions } from '../../utils/AuthContext/actions';
+import { PATHS } from '../../routes';
 
 const useSigninForm = () => {
+  const { loginUser } = useAuthActions();
+  const navigate = useNavigate();
+
   const initialValues = {
     email: '',
     password: '',
@@ -13,7 +19,14 @@ const useSigninForm = () => {
     password: Yup.string().required('Enter your password'),
   });
 
-  const handleLogin = (values: any) => {};
+  const handleLogin = async (values: any) => {
+    try {
+      await loginUser(values);
+      navigate(PATHS.HOME)
+    } catch (err) {
+      console.log(`Error logging in: ${err}`);
+    }
+  };
 
   return {
     initialValues,
