@@ -32,34 +32,44 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-	try {
+  try {
     const user = await User.findUserByCredentials(
       req.body.email,
       req.body.password
     );
-    const token = user.generateAuthToken();
+    const token = await user.generateAuthToken();
     res.status(200).send({ user, token });
   } catch (err: any) {
     res.status(400).send({ error: err.message });
   }
 };
 
+export const getCurrentUser = async (req: AuthRequest, res: Response) => {
+  try {
+    res.send(req.user);
+  } catch (err: any) {
+    res.status(500).send()
+  }
+};
+
 export const logoutUser = async (req: AuthRequest, res: Response) => {
   try {
-    req.user.sessions = req.user.sessions.filter((session: ISession) => session.token !== req.token);
+    req.user.sessions = req.user.sessions.filter(
+      (session: ISession) => session.token !== req.token
+    );
     req.user.save();
-    res.send()
-  } catch(err: any) {
+    res.send();
+  } catch (err: any) {
     res.status(500).send();
   }
-}
+};
 
 export const logoutAll = async (req: AuthRequest, res: Response) => {
   try {
     req.user.sessions = [];
     req.user.save();
-    res.send()
-  } catch(err: any) {
+    res.send();
+  } catch (err: any) {
     res.status(500).send();
   }
-}
+};

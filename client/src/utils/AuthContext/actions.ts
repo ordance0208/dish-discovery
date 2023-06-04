@@ -1,15 +1,19 @@
-import * as types from './types';
 import { useCallback } from 'react';
+import * as types from './types';
 import { useAuthContext } from './context';
 import { LoginFields, RegisterFields } from '../../models/authPayloads';
-import { userLogin, userRegister, userLogout } from '../../endpoints/session';
+import {
+  userLogin,
+  userRegister,
+  userLogout,
+  currentUser,
+} from '../../endpoints/session';
 
 export const useAuthActions = () => {
   const { dispatch } = useAuthContext();
 
   const registerUser = useCallback(
     async (body: RegisterFields) => {
-      console.log('called')
       dispatch({ type: types.SIGN_UP });
       try {
         const data = await userRegister(body);
@@ -30,13 +34,24 @@ export const useAuthActions = () => {
         const data = await userLogin(body);
         const payload = data;
         dispatch({ type: types.SIGN_IN_SUCCESS, payload });
-      } catch (err) {
+      } catch (err: any) {
         dispatch({ type: types.SIGN_IN_FAIL });
-        console.log('Cannot login: ', err);
+        throw new Error(err.message);
       }
     },
     [dispatch]
   );
+
+  const getCurrentUser = useCallback(async () => {
+    dispatch({ type: types.GET_CURRENT_USER });
+    try {
+      const data = await currentUser();
+      const payload = data;
+      dispatch({ type: types.GET_CURRENT_USER_SUCCESS, payload });
+    } catch (err) {
+      dispatch({ type: types.GET_CURRENT_USER_FAIL });
+    }
+  }, [dispatch]);
 
   const logoutUser = useCallback(async () => {
     dispatch({ type: types.SIGN_OUT });
@@ -46,13 +61,14 @@ export const useAuthActions = () => {
       dispatch({ type: types.SIGN_OUT_SUCCESS, payload });
     } catch (err) {
       dispatch({ type: types.SIGN_OUT_FAIL });
-      console.log('Cannot sign out: ', err);
+      console.log('Cannot sign out: ', err);      
     }
   }, [dispatch]);
 
   return {
     registerUser,
     loginUser,
+    getCurrentUser,
     logoutUser,
   };
 };

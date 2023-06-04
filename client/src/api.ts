@@ -1,5 +1,5 @@
 import axios from 'axios';
-const DEV_REST_API_URL = 'localhost:8000';
+const DEV_REST_API_URL = 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: `${DEV_REST_API_URL}/api`,

@@ -1,10 +1,10 @@
 import { useAuthContext } from './context';
 
 export const useAuthData = () => {
-	const { auth, loading } = useAuthContext()
+  const { auth } = useAuthContext();
 
-	return {
-		auth,
-		loading
-	}
+  return {
+    user: auth.user,
+    loading: auth.loading,
+  };
 };

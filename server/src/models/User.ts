@@ -13,7 +13,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   sessions: ISession[];
-  generateAuthToken: () => void;
+  generateAuthToken: () => string;
 }
 
 interface UserModel extends Model<IUser> {
@@ -75,6 +75,16 @@ userSchema.methods.generateAuthToken = async function () {
 
   await user.save();
   return token;
+};
+
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.sessions;
+
+  return userObject;
 };
 
 userSchema.pre('save', async function (next) {
