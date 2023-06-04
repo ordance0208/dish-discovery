@@ -8,6 +8,8 @@ import { Path } from '../../models/path';
 import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
+import { useAuthContext } from '../../utils/AuthContext/context';
+import { useAuthData } from '../../utils/AuthContext/selectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -74,7 +76,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Navbar = () => {
   const classes = useStyles();
-
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
   return (
@@ -83,11 +84,14 @@ const Navbar = () => {
         <div className={classes.header}>
           <img className={classes.logo} src={logo} alt="navbar logo"/>
           <nav className={classes.nav}>
-            {menuPaths.map(({ to, label }: Path) => (
-              <Link to={to} key={to}>
-                {label}
-              </Link>
-            ))}
+            {menuPaths.map(({ to, label, availableWhenLoggedIn }: Path) => {
+              if(!availableWhenLoggedIn && localStorage.getItem('token')) return
+              return (
+                <Link to={to} key={to}>
+                  {label}
+                </Link>
+              )
+            })}
             {/* <ThemeToggleButton /> */}
           </nav>
           <div className={classes.iconMoonSpecial}>
