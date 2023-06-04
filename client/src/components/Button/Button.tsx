@@ -13,6 +13,7 @@ type ButtonProps = {
     | 'info'
     | 'warning'
     | undefined;
+  type?: 'submit' | 'reset' | 'button';
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   children?: string;
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
       fontWeight: 600,
       padding: '12px 0',
       color: WHITE,
-      fontSize: 16
+      fontSize: 16,
     },
   },
 });
@@ -43,8 +44,9 @@ const Button = ({
   endIcon,
   fullWidth,
   disabled,
-  onClick,
+  type,
   className,
+  onClick,
 }: ButtonProps) => {
   const classes = useStyles();
 
@@ -60,6 +62,7 @@ const Button = ({
       color={color}
       disabled={disabled}
       onClick={onClick}
+      type={type}
     >
       {children}
     </MuiButton>
