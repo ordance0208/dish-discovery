@@ -29,7 +29,6 @@ const useStyles = makeStyles({
       textTransform: 'none',
       borderRadius: 4,
       fontWeight: 600,
-      padding: '12px 0',
       color: WHITE,
       fontSize: 16,
     },
