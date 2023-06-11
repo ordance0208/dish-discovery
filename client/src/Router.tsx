@@ -6,18 +6,19 @@ import PublicRoute from './utils/PublicRoute';
 import Home from './views/Home';
 import SignUp from './views/Auth/SignUp';
 import SignIn from './views/Auth/SignIn';
+import ProfileSettings from './views/Profile/ProfileSettings';
 
 const Router = () => {
-  const { getCurrentUser } = useAuthActions()
+  const { getCurrentUser } = useAuthActions();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    if(token) {
-      getCurrentUser()
+    if (token) {
+      getCurrentUser();
     }
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   return (
     <Routes>
@@ -26,6 +27,7 @@ const Router = () => {
         <Route element={<SignUp />} path={AUTH_PATHS.REGISTER} />
         <Route element={<SignIn />} path={AUTH_PATHS.LOGIN} />
       </Route>
+      <Route path={PATHS.PROFILE_SETTINGS} element={<ProfileSettings />}/>
     </Routes>
   );
 };
