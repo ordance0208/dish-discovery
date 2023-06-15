@@ -13,11 +13,6 @@ export const menuPaths: Path[] = [
     availableWhenLoggedIn: true
   },
   {
-    label: 'About',
-    to: PATHS.ABOUT,
-    availableWhenLoggedIn: true
-  },
-  {
     label: 'Sign In',
     to: AUTH_PATHS.LOGIN,
     availableWhenLoggedIn: false
