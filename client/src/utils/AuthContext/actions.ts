@@ -7,6 +7,7 @@ import {
   userRegister,
   userLogout,
   currentUser,
+  logoutAll,
 } from '../../endpoints/session';
 
 export const useAuthActions = () => {
@@ -65,10 +66,23 @@ export const useAuthActions = () => {
     }
   }, [dispatch]);
 
+  const logoutAllSessions = useCallback(async () => {
+    dispatch({ type: types.SIGN_OUT });
+    try {
+      const data = await logoutAll();
+      const payload = data;
+      dispatch({ type: types.SIGN_OUT_SUCCESS, payload });
+    } catch (err) {
+      dispatch({ type: types.SIGN_OUT_FAIL });
+      console.log('Cannot sign out: ', err);      
+    }
+  }, [dispatch]);
+
   return {
     registerUser,
     loginUser,
     getCurrentUser,
     logoutUser,
+    logoutAllSessions,
   };
 };
