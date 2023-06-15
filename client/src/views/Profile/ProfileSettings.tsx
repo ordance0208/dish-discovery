@@ -4,6 +4,7 @@ import { Theme } from '@mui/material/styles';
 import useUserSettingsTabs from '../../hooks/settings/useUserSettingsTabs';
 import Tabs from '../../components/Tabs';
 import PersonalSettings from './components/PersonalSettings';
+import PrivacySettings from './components/PrivacySettings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   profileView: {
@@ -34,6 +35,8 @@ const ProfileSettings = () => {
     switch (tab) {
       case 0:
         return <PersonalSettings />;
+      case 1:
+        return <PrivacySettings />
     }
   };
 
