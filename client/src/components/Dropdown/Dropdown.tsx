@@ -25,20 +25,26 @@ interface Props {
   };
   options?: Option[];
   overrideRenderOptions?: (item: Option) => JSX.Element;
+  onOptionClick?: (item: Option) => void;
   onClose: () => void;
 }
 
 const useStyles = makeStyles({
   root: {
     borderRadius: 4,
-    boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
   },
   try: {
     '& .MuiPaper-root': {
+      marginTop: 10,
+      boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 12px 0px',
       padding: 12,
     },
   },
   option: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
     padding: '4px 8px',
     textAlign: 'center',
     '&:hover': {
@@ -57,14 +63,20 @@ const Dropdown = ({
   transformOrigin,
   options,
   overrideRenderOptions,
+  onOptionClick,
   onClose,
 }: Props) => {
   const classes = useStyles();
 
   const renderOption = (option: Option) => {
     return (
-      <div className={classes.option} key={option.value}>
+      <div
+        className={classes.option}
+        key={option.value}
+        onClick={() => onOptionClick?.(option)}
+      >
         <Typography>{option.label}</Typography>
+        {option.icon && option.icon}
       </div>
     );
   };
