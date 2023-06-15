@@ -15,7 +15,7 @@ import Dialog from '../../../../components/Dialog';
 const useStyles = makeStyles({
   personalSettingsContent: {
     width: 500,
-    margin: '30px auto',
+    margin: '50px auto',
   },
   userAvatar: {
     borderRadius: '50%',
@@ -117,6 +117,7 @@ const PersonalSettings = () => {
         onClose={() => setDialogOpened(false)}
         onConfirm={() => setDialogOpened(false)}
         title='Remove your profile picture'
+        confirmButtonColor='warning'
       >
         <Typography>
           Are you sure that you want to remove your profile picture?
