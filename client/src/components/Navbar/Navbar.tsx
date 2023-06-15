@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
-import { Link } from 'react-router-dom';
 import { menuPaths } from '../../utils/navbar.helpers';
+import { Link } from 'react-router-dom';
 import { Path } from '../../models/path';
 import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
+import ProfileDropdown from '../ProfileDropdown';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
-import { useAuthContext } from '../../utils/AuthContext/context';
-import { useAuthData } from '../../utils/AuthContext/selectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -78,26 +77,24 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
-  const { loading } = useAuthData()
-
   return (
     <>
       <header className={classes.root}>
         <div className={classes.header}>
-          <img className={classes.logo} src={logo} alt="navbar logo"/>
+          <img className={classes.logo} src={logo} alt='navbar logo' />
           <nav className={classes.nav}>
             {menuPaths.map(({ to, label, availableWhenLoggedIn }: Path) => {
-              if(!availableWhenLoggedIn && localStorage.getItem('token')) return
+              if (!availableWhenLoggedIn && localStorage.getItem('token'))
+                return null;
               return (
                 <Link to={to} key={to}>
                   {label}
                 </Link>
-              )
+              );
             })}
-            {/* <ThemeToggleButton /> */}
+            {localStorage.getItem('token') && <ProfileDropdown />}
           </nav>
           <div className={classes.iconMoonSpecial}>
-            {/* <ThemeToggleButton /> */}
             <HamburgerButton
               menuOpened={menuOpened}
               setMenuOpened={setmenuOpened}
@@ -106,7 +103,11 @@ const Navbar = () => {
         </div>
       </header>
       <div style={{ width: '100%', height: '70px', position: 'relative' }}>
-        <MobileMenu menuOpened={menuOpened} setMenuOpened={setmenuOpened} paths={menuPaths} />
+        <MobileMenu
+          menuOpened={menuOpened}
+          setMenuOpened={setmenuOpened}
+          paths={menuPaths}
+        />
       </div>
     </>
   );
