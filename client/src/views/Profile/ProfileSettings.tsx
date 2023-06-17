@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     maxWidth: 1440,
     margin: 'auto',
-    height: '100vh',
+    height: 'calc(100vh - 71px)',
     [theme.breakpoints.down('xl')]: {
       width: '90%',
     },
