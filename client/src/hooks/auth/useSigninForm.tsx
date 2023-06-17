@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '../../utils/AuthContext/actions';
 import { PATHS } from '../../routes';
 
-const useSigninForm = () => {
+const useSigninForm = (setLoginError : React.Dispatch<React.SetStateAction<string | null>>) => {
   const { loginUser } = useAuthActions();
   const navigate = useNavigate();
 
@@ -23,8 +23,8 @@ const useSigninForm = () => {
     try {
       await loginUser(values);
       navigate(PATHS.HOME)
-    } catch (err) {
-      console.log(`Error logging in: ${err}`);
+    } catch (err: any) {      
+      setLoginError(err.message)
     }
   };
 

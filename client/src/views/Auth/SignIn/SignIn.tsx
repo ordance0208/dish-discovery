@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
@@ -7,6 +8,7 @@ import TextField from '../../../components/TextField';
 import PasswordField from '../../../components/PasswordField';
 import Button from '../../../components/Button';
 import Typography from '../../../components/Typography';
+import Alert from '../../../components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => ({
   signinForm: {
@@ -26,11 +28,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: 600,
     color: theme.palette.primary.main,
   },
+  alert: {
+    marginTop: 16,
+  },
 }));
 
 const SignIn = () => {
   const classes = useStyles();
-  const { initialValues, validationSchema, handleLogin } = useSigninForm();
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const { initialValues, validationSchema, handleLogin } =
+    useSigninForm(setLoginError);
+
+  useEffect(() => {
+    if (!loginError) return;
+
+    setTimeout(() => {
+      setLoginError(null);
+    }, 5000);
+  }, [loginError]);
 
   return (
     <AuthView
@@ -40,30 +55,41 @@ const SignIn = () => {
       isLogin
     >
       {(props) => (
-        <form onSubmit={props.handleSubmit} className={classes.signinForm}>
-          <TextField
-            name='email'
-            type='email'
-            fullWidth
-            label='Email address'
-            required
-          />
-          <PasswordField name='password' />
-          <Button
-            onClick={props.handleSubmit}
-            fullWidth
-            type='submit'
-            disabled={props.isSubmitting}
-          >
-            Sign in
-          </Button>
-          <Typography className={classes.noAccount}>
-            Don't have an account?{' '}
-            <Link to='/register' className={classes.signupLink}>
-              Sign up
-            </Link>
-          </Typography>
-        </form>
+        <>
+          <form onSubmit={props.handleSubmit} className={classes.signinForm}>
+            <TextField
+              name='email'
+              type='email'
+              fullWidth
+              label='Email address'
+              required
+            />
+            <PasswordField name='password' />
+            <Button
+              onClick={props.handleSubmit}
+              fullWidth
+              type='submit'
+              disabled={props.isSubmitting}
+            >
+              Sign in
+            </Button>
+            <Typography className={classes.noAccount}>
+              Don't have an account?{' '}
+              <Link to='/register' className={classes.signupLink}>
+                Sign up
+              </Link>
+            </Typography>
+          </form>
+          {!!loginError && (
+            <Alert
+              severity='warning'
+              variant='filled'
+              className={classes.alert}
+            >
+              {`${loginError}. Please try again!`}
+            </Alert>
+          )}
+        </>
       )}
     </AuthView>
   );
