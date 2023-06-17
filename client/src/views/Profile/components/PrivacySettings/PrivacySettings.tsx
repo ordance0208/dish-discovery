@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Formik, FormikProps } from 'formik';
 import { makeStyles } from '@mui/styles';
 import { TEXT_DARK } from '../../../../theme';
 import useUserPrivacySettings from '../../../../hooks/settings/useUserPrivacySettings';
 import Typography from '../../../../components/Typography';
-import PasswordField from '../../../../components/PasswordField/PasswordField';
+import PasswordField from '../../../../components/PasswordField';
 import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
 
@@ -42,8 +43,12 @@ const useStyles = makeStyles({
 const PrivacySettings = () => {
   const classes = useStyles();
 
-  const { handleLogoutAllSessions, handleDeleteAccount } =
-    useUserPrivacySettings();
+  const {
+    initialValues,
+    validationSchema,
+    handleLogoutAllSessions,
+    handleDeleteAccount,
+  } = useUserPrivacySettings();
 
   const [action, setAction] = useState<'logout' | 'delete' | null>(null);
 
@@ -53,16 +58,38 @@ const PrivacySettings = () => {
         <Typography className={classes.subtitle}>
           Change your password
         </Typography>
-        <div className={classes.passwordFieldContainer}>
-          <PasswordField label='Current password' />
-          <PasswordField label='New password' />
-          <PasswordField label='Confirm new password' />
-          <Button
-            className={classes.changeButton}
-            onClick={() => setAction('logout')}
+        <div>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values: any) => console.log(values)}
           >
-            Change password
-          </Button>
+            {(props: FormikProps<any>) => {
+              return (
+                <form
+                  className={classes.passwordFieldContainer}
+                  onSubmit={props.handleSubmit}
+                >
+                  <PasswordField
+                    name='currentPassword'
+                    label='Current password'
+                  />
+                  <PasswordField name='newPassword' label='New password' />
+                  <PasswordField
+                    name='confirmNewPassword'
+                    label='Confirm new password'
+                  />
+                  <Button
+                    className={classes.changeButton}
+                    onClick={() => props.handleSubmit()}
+                    type='submit'
+                  >
+                    Change password
+                  </Button>
+                </form>
+              );
+            }}
+          </Formik>
         </div>
       </div>
       <div className={classes.section}>
