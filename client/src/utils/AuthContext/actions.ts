@@ -36,8 +36,8 @@ export const useAuthActions = () => {
         const payload = data;
         dispatch({ type: types.SIGN_IN_SUCCESS, payload });
       } catch (err: any) {
-        dispatch({ type: types.SIGN_IN_FAIL });
-        throw new Error(err.message);
+        dispatch({ type: types.SIGN_IN_FAIL });        
+        throw new Error(err.response.data.error);
       }
     },
     [dispatch]
