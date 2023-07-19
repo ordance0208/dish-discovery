@@ -123,6 +123,7 @@ const PersonalSettings = () => {
 
   useEffect(() => {
     setAvatar(avatarUrl || defaultAvatar);
+    // eslint-disable-next-line
   }, [user]);
 
   const handleOptionsClick = (option: Option) => {
