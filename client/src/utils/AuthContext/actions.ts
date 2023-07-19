@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import * as types from './types';
 import { useAuthContext } from './context';
 import { LoginFields, RegisterFields } from '../../models/authPayloads';
+import { PersonalInfoPayload } from '../../models/user/userSettingsPayloads';
 import {
   userLogin,
   userRegister,
@@ -9,6 +10,11 @@ import {
   currentUser,
   logoutAll,
 } from '../../endpoints/session';
+import {
+  avatarUpload,
+  removeAvatar,
+  updatePersonalInfo,
+} from '../../endpoints/user';
 
 export const useAuthActions = () => {
   const { dispatch } = useAuthContext();
@@ -22,7 +28,6 @@ export const useAuthActions = () => {
         dispatch({ type: types.SIGN_UP_SUCCESS, payload });
       } catch (err) {
         dispatch({ type: types.SIGN_UP_FAIL });
-        console.log('Cannot register: ', err);
       }
     },
     [dispatch]
@@ -36,7 +41,7 @@ export const useAuthActions = () => {
         const payload = data;
         dispatch({ type: types.SIGN_IN_SUCCESS, payload });
       } catch (err: any) {
-        dispatch({ type: types.SIGN_IN_FAIL });        
+        dispatch({ type: types.SIGN_IN_FAIL });
         throw new Error(err.response.data.error);
       }
     },
@@ -62,7 +67,6 @@ export const useAuthActions = () => {
       dispatch({ type: types.SIGN_OUT_SUCCESS, payload });
     } catch (err) {
       dispatch({ type: types.SIGN_OUT_FAIL });
-      console.log('Cannot sign out: ', err);      
     }
   }, [dispatch]);
 
@@ -74,7 +78,47 @@ export const useAuthActions = () => {
       dispatch({ type: types.SIGN_OUT_SUCCESS, payload });
     } catch (err) {
       dispatch({ type: types.SIGN_OUT_FAIL });
-      console.log('Cannot sign out: ', err);      
+    }
+  }, [dispatch]);
+
+  const updateUserInfo = useCallback(
+    async (body: PersonalInfoPayload) => {
+      dispatch({ type: types.UPDATE_USER_INFO });
+      try {
+        const data = await updatePersonalInfo(body);
+        const payload = data;
+        dispatch({ type: types.UPDATE_USER_INFO_SUCCESS, payload });
+      } catch (err: any) {
+        dispatch({ type: types.UPDATE_USER_INFO_FAIL });
+        throw new Error(err.response.data.error);
+      }
+    },
+    [dispatch]
+  );
+
+  const uploadUserAvatar = useCallback(
+    async (formData: FormData) => {
+      dispatch({ type: types.UPLOAD_USER_AVATAR });
+      try {
+        const data = await avatarUpload(formData);
+        const payload = data;
+        dispatch({ type: types.UPLOAD_USER_AVATAR_SUCCESS, payload });
+      } catch (err: any) {
+        dispatch({ type: types.UPLOAD_USER_AVATAR_FAIL });
+        throw new Error(err.response.data.error);
+      }
+    },
+    [dispatch]
+  );
+
+  const removeUserAvatar = useCallback(async () => {
+    dispatch({ type: types.REMOVE_USER_AVATAR });
+    try {
+      await removeAvatar();
+      dispatch({ type: types.REMOVE_USER_AVATAR_SUCCESS });
+    } catch (err: any) {
+      dispatch({ type: types.REMOVE_USER_AVATAR_FAIL });
+      throw new Error(err.response.data.error);
     }
   }, [dispatch]);
 
@@ -84,5 +128,8 @@ export const useAuthActions = () => {
     getCurrentUser,
     logoutUser,
     logoutAllSessions,
+    updateUserInfo,
+    uploadUserAvatar,
+    removeUserAvatar,
   };
 };
