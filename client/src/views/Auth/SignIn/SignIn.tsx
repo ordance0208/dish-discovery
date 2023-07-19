@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import useSigninForm from '../../../hooks/auth/useSigninForm';
+import { IResponse } from '../../../models/response';
 import AuthView from '../../../components/AuthView';
 import TextField from '../../../components/TextField';
 import PasswordField from '../../../components/PasswordField';
@@ -35,17 +36,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const SignIn = () => {
   const classes = useStyles();
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const { initialValues, validationSchema, handleLogin } =
-    useSigninForm(setLoginError);
+  const [response, setResponse] = useState<IResponse | undefined>();
 
   useEffect(() => {
-    if (!loginError) return;
+    if (!response) return;
 
     setTimeout(() => {
-      setLoginError(null);
+      setResponse(undefined);
     }, 5000);
-  }, [loginError]);
+  }, [response]);
+  const { initialValues, validationSchema, handleLogin } =
+    useSigninForm(setResponse);
 
   return (
     <AuthView
@@ -80,13 +81,9 @@ const SignIn = () => {
               </Link>
             </Typography>
           </form>
-          {!!loginError && (
-            <Alert
-              severity='warning'
-              variant='filled'
-              className={classes.alert}
-            >
-              {`${loginError}. Please try again!`}
+          {response && (
+            <Alert className={classes.alert} severity={response.severity}>
+              {response.text}
             </Alert>
           )}
         </>

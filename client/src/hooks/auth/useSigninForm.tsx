@@ -1,10 +1,11 @@
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '../../utils/AuthContext/actions';
+import { IResponse } from '../../models/response';
 import { PATHS } from '../../routes';
 
 const useSigninForm = (
-  setLoginError: React.Dispatch<React.SetStateAction<string | null>>
+  setResponse: React.Dispatch<React.SetStateAction<IResponse | undefined>>
 ) => {
   const { loginUser } = useAuthActions();
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const useSigninForm = (
       await loginUser(values);
       navigate(PATHS.HOME);
     } catch (err: any) {
-      setLoginError(err.message);
+      setResponse({ severity: 'warning', text: err.message });
     }
   };
 
