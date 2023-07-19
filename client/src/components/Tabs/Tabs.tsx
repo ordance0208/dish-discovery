@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { NEUTRAL } from '../../theme';
-import { Theme } from '@mui/material/styles';
 import { Tab as MuiTab, Tabs as MuiTabs } from '@mui/material';
 
 type Tab = {
@@ -18,6 +18,10 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => ({
   tabLabel: {
     fontSize: 15,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 12,
+      textAlign: 'center'
+    },
     textTransform: 'none',
     color: theme.palette.text.primary,
   },
@@ -32,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.primary.main,
     },
   },
+  root: {
+    flex: 1
+  }
 }));
 
 const Tabs = ({ tabs, orientation, setTabsExternal }: Props) => {
@@ -49,7 +56,7 @@ const Tabs = ({ tabs, orientation, setTabsExternal }: Props) => {
         <MuiTab
           key={tab.label}
           disableRipple
-          classes={{ selected: classes.selected }}
+          classes={{ selected: classes.selected, root: classes.root }}
           iconPosition='start'
           icon={tab?.icon}
           className={classes.tabButton}
