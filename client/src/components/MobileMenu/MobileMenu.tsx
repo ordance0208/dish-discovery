@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
-import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@mui/styles';
 import { Collapse, Theme } from '@mui/material';
 
 type Path = {
   label: string;
   to: string;
+  availableWhenLoggedIn?: boolean;
 };
 
 interface Props {
@@ -51,13 +52,19 @@ const MobileMenu = ({ menuOpened, paths, setMenuOpened }: Props) => {
 
   return (
     <Collapse in={menuOpened} className={classes.mobileMenuContianer}>
-      {paths.map(({ to, label }: Path) => (
-        <div className={classes.mobileMenuLinks} onClick={() => setMenuOpened(false)}  key={to}>
-          <Link to={to}>
-            {label.charAt(0).toUpperCase() + label.substring(1)}
-          </Link>
-        </div>
-      ))}
+      {paths.map(({ to, label, availableWhenLoggedIn }: Path) =>
+        !availableWhenLoggedIn && localStorage.getItem('token') ? null : (
+          <div
+            className={classes.mobileMenuLinks}
+            onClick={() => setMenuOpened(false)}
+            key={to}
+          >
+            <Link to={to}>
+              {label.charAt(0).toUpperCase() + label.substring(1)}
+            </Link>
+          </div>
+        )
+      )}
     </Collapse>
   );
 };
