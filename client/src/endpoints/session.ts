@@ -14,9 +14,9 @@ export const currentUser = function () {
 };
 
 export const userLogout = function () {
-  api.post('/auth/logout').then((res) => res.data);
+  return api.post('/auth/logout').then((res) => res.data);
 };
 
 export const logoutAll = function () {
-  api.post('/auth/logout-all').then((res) => res.data);
+  return api.post('/auth/logout-all').then((res) => res.data);
 };
