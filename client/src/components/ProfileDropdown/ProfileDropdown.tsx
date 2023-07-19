@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import useProfileDropdown from '../../hooks/useProfileDropdown';
+import { useAuthData } from '../../utils/AuthContext/selectors';
 import { useAuthActions } from '../../utils/AuthContext/actions';
 import { Option } from '../Dropdown/Dropdown';
 import { DropdownOptions } from '../../models/profileDropdown';
@@ -31,10 +32,18 @@ const ProfileDropdown = () => {
   const navigate = useNavigate();
   const { dropdownOptions } = useProfileDropdown();
 
+  const { user } = useAuthData();
+
+  const [avatar, setAvatar] = useState<string>(defaultAvatar);
+
   const [dropdownOpened, setDropdownOpened] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
   const { logoutUser } = useAuthActions();
+
+  useEffect(() => {
+    user?.avatar ? setAvatar(user?.avatar) : setAvatar(defaultAvatar);
+  }, [user?.avatar]);
 
   const onOptionClick = async (option: Option) => {
     switch (option.value) {
@@ -62,7 +71,7 @@ const ProfileDropdown = () => {
         setAnchorEl(anchorEl ? null : e.currentTarget);
       }}
     >
-      <img className={classes.avatar} src={defaultAvatar} alt='user avatar' />
+      <img className={classes.avatar} src={avatar} alt='user avatar' />
       {anchorEl ? <UilAngleUp /> : <UilAngleDown />}
       <Dropdown
         anchorEl={anchorEl}
