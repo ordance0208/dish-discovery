@@ -6,20 +6,28 @@ import User, { ISession } from '../models/User';
 export const registerUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
 
+  const userAlreadyExsists = await User.findOne({ email });
+
+  if (userAlreadyExsists) {
+    return res
+      .status(400)
+      .send({ error: 'User with that email already exists!' });
+  }
+
   if (!firstName || !lastName || !email || !password || !confirmPassword) {
-    return res.status(400).send({ error: 'Invalid fields' });
+    return res.status(400).send({ error: 'Invalid fields!' });
   }
 
   if (password !== confirmPassword) {
-    return res.status(400).send({ error: 'Passwords must match' });
+    return res.status(400).send({ error: 'Passwords must match!' });
   }
 
   if (!validator.isEmail(email)) {
-    return res.status(400).send({ error: 'Invalid email format' });
+    return res.status(400).send({ error: 'Invalid email format!' });
   }
 
   if (!validator.isStrongPassword(password)) {
-    return res.status(400).send({ error: 'Password is weak' });
+    return res.status(400).send({ error: 'Password is weak!' });
   }
 
   try {
@@ -48,7 +56,7 @@ export const getCurrentUser = async (req: AuthRequest, res: Response) => {
   try {
     res.send(req.user);
   } catch (err: any) {
-    res.status(500).send()
+    res.status(500).send();
   }
 };
 

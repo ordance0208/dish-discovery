@@ -55,11 +55,51 @@ export const authReducer = (state: State, action: Action<any>): State => {
       return { ...state, loading: true };
     }
     case types.SIGN_OUT_SUCCESS: {
+      localStorage.removeItem('token');
       return { user: null, loading: false };
     }
     case types.SIGN_OUT_FAIL: {
       return { ...state, loading: false };
     }
+
+    // Update user cases
+    case types.UPDATE_USER_INFO: {
+      return { ...state, loading: true };
+    }
+    case types.UPDATE_USER_INFO_SUCCESS: {
+      return { ...state, user: action.payload, loading: false };
+    }
+    case types.UPDATE_USER_INFO_FAIL: {
+      return { ...state, loading: false };
+    }
+
+    // Upload avatar cases
+    case types.UPLOAD_USER_AVATAR: {
+      return { ...state, loading: true };
+    }
+    case types.UPLOAD_USER_AVATAR_SUCCESS: {
+      return {
+        ...state,
+        user: { ...(state.user as IUser), avatar: action.payload },
+        loading: false,
+      };
+    }
+
+    // Remove avatar cases
+    case types.REMOVE_USER_AVATAR: {
+      return { ...state, loading: true };
+    }
+    case types.REMOVE_USER_AVATAR_SUCCESS: {
+      return {
+        ...state,
+        user: { ...(state.user as IUser), avatar: null },
+        loading: false,
+      };
+    }
+    case types.REMOVE_USER_AVATAR_FAIL: {
+      return { ...state, loading: false };
+    }
+
     default: {
       return state;
     }
