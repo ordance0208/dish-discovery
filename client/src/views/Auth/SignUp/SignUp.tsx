@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import useSignupForm from '../../../hooks/auth/useSignupForm';
+import { IResponse } from '../../../models/response';
 import TextField from '../../../components/TextField';
 import PasswordField from '../../../components/PasswordField';
 import Button from '../../../components/Button';
 import Typography from '../../../components/Typography';
 import AuthView from '../../../components/AuthView';
-import { IResponse } from '../../../models/response';
 import Alert from '../../../components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => ({
