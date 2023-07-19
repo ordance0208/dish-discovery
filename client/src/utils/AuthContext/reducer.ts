@@ -46,8 +46,7 @@ export const authReducer = (state: State, action: Action<any>): State => {
       return { ...state, user: action.payload, loading: false };
     }
     case types.GET_CURRENT_USER_FAIL: {
-      localStorage.removeItem('token');
-      return { ...state, user: null, loading: false };
+      return { ...state, loading: false };
     }
 
     // Sign out cases
@@ -61,6 +60,45 @@ export const authReducer = (state: State, action: Action<any>): State => {
     case types.SIGN_OUT_FAIL: {
       return { ...state, loading: false };
     }
+
+    // Update user cases
+    case types.UPDATE_USER_INFO: {
+      return { ...state, loading: true };
+    }
+    case types.UPDATE_USER_INFO_SUCCESS: {
+      return { ...state, user: action.payload, loading: false };
+    }
+    case types.UPDATE_USER_INFO_FAIL: {
+      return { ...state, loading: false };
+    }
+
+    // Upload avatar cases
+    case types.UPLOAD_USER_AVATAR: {
+      return { ...state, loading: true };
+    }
+    case types.UPLOAD_USER_AVATAR_SUCCESS: {
+      return {
+        ...state,
+        user: { ...(state.user as IUser), avatar: action.payload },
+        loading: false,
+      };
+    }
+
+    // Remove avatar cases
+    case types.REMOVE_USER_AVATAR: {
+      return { ...state, loading: true };
+    }
+    case types.REMOVE_USER_AVATAR_SUCCESS: {
+      return {
+        ...state,
+        user: { ...(state.user as IUser), avatar: null },
+        loading: false,
+      };
+    }
+    case types.REMOVE_USER_AVATAR_FAIL: {
+      return { ...state, loading: false };
+    }
+
     default: {
       return state;
     }
