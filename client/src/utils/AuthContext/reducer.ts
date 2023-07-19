@@ -46,7 +46,8 @@ export const authReducer = (state: State, action: Action<any>): State => {
       return { ...state, user: action.payload, loading: false };
     }
     case types.GET_CURRENT_USER_FAIL: {
-      return { ...state, loading: false };
+      localStorage.removeItem('token');
+      return { ...state, user: null, loading: false };
     }
 
     // Sign out cases
