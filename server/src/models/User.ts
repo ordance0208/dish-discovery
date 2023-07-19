@@ -13,6 +13,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   sessions: ISession[];
+  avatar: string;
   generateAuthToken: () => string;
 }
 
@@ -38,6 +39,7 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
+  avatar: String,
   sessions: [
     {
       token: {
