@@ -1,21 +1,28 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Formik, FormikProps } from 'formik';
 import { makeStyles } from '@mui/styles';
+import { CircularProgress, Grid, Theme } from '@mui/material';
 import { NEUTRAL } from '../../../../theme';
 import useUserPersonalSettings from '../../../../hooks/settings/useUserPersonalSettings';
+import { PersonalInfoPayload } from '../../../../models/user/userSettingsPayloads';
+import { IResponse } from '../../../../models/response';
 import { AvatarActions } from '../../../../models/settings';
 import { Option } from '../../../../components/Dropdown/Dropdown';
-import defaultAvatar from '../../../../assets/img/default-avatar.png';
 import TextField from '../../../../components/TextField';
 import Button from '../../../../components/Button';
 import Typography from '../../../../components/Typography';
 import Dropdown from '../../../../components/Dropdown';
 import Dialog from '../../../../components/Dialog';
+import Alert from '../../../../components/Alert';
+import defaultAvatar from '../../../../assets/img/default-avatar.png';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   personalSettingsContent: {
     width: 500,
     margin: '50px auto',
+    [theme.breakpoints.down('md')]: {
+      width: '90%',
+    },
   },
   userAvatar: {
     borderRadius: '50%',
@@ -65,10 +72,25 @@ const useStyles = makeStyles({
       background: NEUTRAL,
     },
   },
+  optionDisabled: {
+    padding: '4px 8px',
+    textAlign: 'center',
+    color: 'lightgray',
+  },
   avatarUpload: {
     display: 'none',
   },
-});
+  alert: {
+    marginTop: 20,
+  },
+  circularProgressWrapper: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}));
 
 const PersonalSettings = () => {
   const classes = useStyles();
@@ -76,10 +98,32 @@ const PersonalSettings = () => {
   const [anchor, setAnchor] = useState<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [avatar, setAvatar] = useState<string>(defaultAvatar);
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
+  const [response, setResponse] = useState<IResponse | undefined>();
 
-  const { avatarOptions, initialValues, validationSchema, onProfileUpdate } =
-    useUserPersonalSettings();
+  useEffect(() => {
+    if (!response) return;
+
+    setTimeout(() => {
+      setResponse(undefined);
+    }, 5000);
+  }, [response]);
+
+  const {
+    user,
+    avatarUrl,
+    avatarOptions,
+    initialValues,
+    validationSchema,
+    onProfileUpdate,
+    handleAvatarUpload,
+    handleRemoveAvatar,
+  } = useUserPersonalSettings(setResponse);
+
+  useEffect(() => {
+    setAvatar(avatarUrl || defaultAvatar);
+  }, [user]);
 
   const handleOptionsClick = (option: Option) => {
     switch (option.value) {
@@ -99,11 +143,14 @@ const PersonalSettings = () => {
   };
 
   const overrideRenderOptions = (option: Option) => {
+    const disabledOption =
+      option.value === AvatarActions.DELETE_PROFILE_PICTURE && !avatarUrl;
+
     return (
       <div
         key={option.value}
-        className={classes.option}
-        onClick={() => handleOptionsClick(option)}
+        className={disabledOption ? classes.optionDisabled : classes.option}
+        onClick={!disabledOption ? () => handleOptionsClick(option) : undefined}
       >
         <Typography>{option.label}</Typography>
       </div>
@@ -111,84 +158,105 @@ const PersonalSettings = () => {
   };
 
   return (
-    <div className={classes.personalSettingsContent}>
-      <Dialog
-        open={dialogOpened}
-        onClose={() => setDialogOpened(false)}
-        onConfirm={() => setDialogOpened(false)}
-        title='Remove your profile picture'
-        confirmButtonColor='warning'
-      >
-        <Typography>
-          Are you sure that you want to remove your profile picture?
-        </Typography>
-      </Dialog>
-      <div className={classes.avatarWrapper}>
-        <input
-          type='file'
-          accept='image/*'
-          className={classes.avatarUpload}
-          ref={fileInputRef}
-        />
-        <img
-          src={defaultAvatar}
-          className={classes.userAvatar}
-          alt='user avatar'
-        />
-        <div
-          className={classes.editAvatar}
-          onClick={(e: any) => setAnchor(e.currentTarget)}
-        >
-          <Typography>Edit</Typography>
+    <>
+      {user ? (
+        <div className={classes.personalSettingsContent}>
+          <Dialog
+            open={dialogOpened}
+            onClose={() => setDialogOpened(false)}
+            onConfirm={() => {
+              handleRemoveAvatar();
+              setDialogOpened(false);
+            }}
+            title='Remove your profile picture'
+            confirmButtonColor='warning'
+          >
+            <Typography>
+              Are you sure that you want to remove your profile picture?
+            </Typography>
+          </Dialog>
+          <div className={classes.avatarWrapper}>
+            <input
+              type='file'
+              accept='image/*'
+              className={classes.avatarUpload}
+              ref={fileInputRef}
+              onChange={(e: any) => handleAvatarUpload(e.target.files[0])}
+            />
+            <img
+              src={avatar}
+              className={classes.userAvatar}
+              alt='user avatar'
+            />
+            <div
+              className={classes.editAvatar}
+              onClick={(e: any) => setAnchor(e.currentTarget)}
+            >
+              <Typography>Edit</Typography>
+            </div>
+          </div>
+          <Dropdown
+            anchorEl={anchor!}
+            open={!!anchor}
+            onClose={() => setAnchor(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            options={avatarOptions}
+            overrideRenderOptions={overrideRenderOptions}
+          />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onProfileUpdate}
+            enableReinitialize
+          >
+            {({
+              handleSubmit,
+              dirty,
+              values: { firstName, lastName, email },
+            }: FormikProps<PersonalInfoPayload>) => {
+              return (
+                <form onSubmit={handleSubmit}>
+                  <div className={classes.personalInfo}>
+                    <TextField name='firstName' label='First name' />
+                    <TextField name='lastName' label='Last name' />
+                    <TextField
+                      name='email'
+                      label='Email address'
+                      className={classes.emailField}
+                      type='email'
+                    />
+                    <Button
+                      disabled={!dirty || !firstName || !lastName || !email}
+                      onClick={handleSubmit}
+                      type='submit'
+                      className={classes.emailField}
+                    >
+                      Update
+                    </Button>
+                  </div>
+                </form>
+              );
+            }}
+          </Formik>
+          {response && (
+            <Alert className={classes.alert} severity={response.severity}>
+              {response.text}
+            </Alert>
+          )}
         </div>
-      </div>
-      <Dropdown
-        anchorEl={anchor!}
-        open={!!anchor}
-        onClose={() => setAnchor(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        options={avatarOptions}
-        overrideRenderOptions={overrideRenderOptions}
-      />
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onProfileUpdate}
-        enableReinitialize
-      >
-        {(props: FormikProps<any>) => {
-          return (
-            <form onSubmit={props.handleSubmit}>
-              <div className={classes.personalInfo}>
-                <TextField name='firstName' label='First name' />
-                <TextField name='lastName' label='Last name' />
-                <TextField
-                  name='email'
-                  label='Email address'
-                  className={classes.emailField}
-                  type='email'
-                />
-                <Button
-                  disabled={!props.dirty}
-                  onClick={props.handleSubmit}
-                  type='submit'
-                  className={classes.emailField}
-                >
-                  Update
-                </Button>
-              </div>
-            </form>
-          );
-        }}
-      </Formik>
-    </div>
+      ) : (
+        <Grid className={classes.circularProgressWrapper}>
+          <CircularProgress size={100} />
+        </Grid>
+      )}
+    </>
   );
 };
 
