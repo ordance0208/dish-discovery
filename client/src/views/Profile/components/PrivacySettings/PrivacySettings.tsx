@@ -4,12 +4,12 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TEXT_DARK } from '../../../../theme';
 import useUserPrivacySettings from '../../../../hooks/settings/useUserPrivacySettings';
+import { PasswordPayload } from '../../../../models/user/userSettingsPayloads';
+import { IResponse } from '../../../../models/response';
 import Typography from '../../../../components/Typography';
 import PasswordField from '../../../../components/PasswordField';
 import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
-import { PasswordPayload } from '../../../../models/user/userSettingsPayloads';
-import { IResponse } from '../../../../models/response';
 import Alert from '../../../../components/Alert';
 
 const useStyles =  makeStyles((theme: Theme) => ({
