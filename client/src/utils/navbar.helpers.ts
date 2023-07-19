@@ -13,6 +13,11 @@ export const menuPaths: Path[] = [
     availableWhenLoggedIn: true
   },
   {
+    label: 'Submit',
+    to: PATHS.RECIPE_SUBMIT,
+    availableWhenLoggedIn: true
+  },
+  {
     label: 'Sign In',
     to: AUTH_PATHS.LOGIN,
     availableWhenLoggedIn: false

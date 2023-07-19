@@ -8,6 +8,7 @@ import Home from './views/Home';
 import SignUp from './views/Auth/SignUp';
 import SignIn from './views/Auth/SignIn';
 import ProfileSettings from './views/Profile/ProfileSettings';
+import RecipeSubmit from './views/RecipeSubmit';
 
 const Router = () => {
   const { getCurrentUser } = useAuthActions();
@@ -30,6 +31,9 @@ const Router = () => {
       </Route>
       <Route element={<PrivateRoute />}>
         <Route element={<ProfileSettings />} path={PATHS.PROFILE_SETTINGS} />
+      </Route>
+      <Route element={<PrivateRoute />}>
+        <Route element={<RecipeSubmit />} path={PATHS.RECIPE_SUBMIT} />
       </Route>
       <Route path={PATHS.PROFILE_SETTINGS} element={<ProfileSettings />} />
     </Routes>

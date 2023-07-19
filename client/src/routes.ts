@@ -6,6 +6,7 @@ const AUTH_PATHS = {
 const PATHS = {
   HOME: '/home',
   RECIPES: '/recipes',
+  RECIPE_SUBMIT: '/recipe-submit',
   ABOUT: '/about',
   PROFILE: '/profile',
   PROFILE_SETTINGS: '/profile-settings'
