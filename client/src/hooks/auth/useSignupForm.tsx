@@ -1,10 +1,13 @@
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { RegisterFields } from '../../models/authPayloads';
+import { IResponse } from '../../models/response';
 import { useAuthActions } from '../../utils/AuthContext/actions';
 import { PATHS } from '../../routes';
 
-const useSignupForm = () => {
+const useSignupForm = (
+  setResponse: React.Dispatch<React.SetStateAction<IResponse | undefined>>
+) => {
   const { registerUser } = useAuthActions();
   const navigate = useNavigate();
 
@@ -45,7 +48,7 @@ const useSignupForm = () => {
       await registerUser(values);
       navigate(PATHS.HOME, { replace: true });
     } catch (err: any) {
-      console.log(err);
+      setResponse({ severity: 'warning', text: err.message });
     }
   };
 

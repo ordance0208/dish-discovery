@@ -1,22 +1,22 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
-import { Link } from 'react-router-dom';
+import { useAuthData } from '../../utils/AuthContext/selectors';
 import { menuPaths } from '../../utils/navbar.helpers';
 import { Path } from '../../models/path';
 import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
+import ProfileDropdown from '../ProfileDropdown';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
-import { useAuthContext } from '../../utils/AuthContext/context';
-import { useAuthData } from '../../utils/AuthContext/selectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: 'fixed',
     top: 0,
     left: 0,
-    width: '100vw',
+    width: '100%',
     padding: '16px 0',
     borderBottom: '1px solid #f3f3f3',
     background: theme.palette.background.default,
@@ -61,16 +61,18 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-  iconMoon: {
-    color: theme.palette.text.primary,
-  },
-  iconMoonSpecial: {
+  hamburgerButtonWrapper: {
     display: 'none',
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
       alignItems: 'center',
-      gap: 8,
+      gap: 16,
     },
+  },
+  mobileMenuWrapper: {
+    position: 'relative',
+    width: '100%',
+    height: 70,
   },
 }));
 
@@ -78,35 +80,40 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
-  const { loading } = useAuthData()
+  const { user } = useAuthData();
 
   return (
     <>
       <header className={classes.root}>
         <div className={classes.header}>
-          <img className={classes.logo} src={logo} alt="navbar logo"/>
+          <img className={classes.logo} src={logo} alt='navbar logo' />
           <nav className={classes.nav}>
             {menuPaths.map(({ to, label, availableWhenLoggedIn }: Path) => {
-              if(!availableWhenLoggedIn && localStorage.getItem('token')) return
+              if (!availableWhenLoggedIn && localStorage.getItem('token'))
+                return null;
               return (
                 <Link to={to} key={to}>
                   {label}
                 </Link>
-              )
+              );
             })}
-            {/* <ThemeToggleButton /> */}
+            {user && <ProfileDropdown />}
           </nav>
-          <div className={classes.iconMoonSpecial}>
-            {/* <ThemeToggleButton /> */}
+          <div className={classes.hamburgerButtonWrapper}>
             <HamburgerButton
               menuOpened={menuOpened}
               setMenuOpened={setmenuOpened}
             />
+            {user && <ProfileDropdown />}
           </div>
         </div>
       </header>
-      <div style={{ width: '100%', height: '70px', position: 'relative' }}>
-        <MobileMenu menuOpened={menuOpened} setMenuOpened={setmenuOpened} paths={menuPaths} />
+      <div className={classes.mobileMenuWrapper}>
+        <MobileMenu
+          menuOpened={menuOpened}
+          paths={menuPaths}
+          setMenuOpened={setmenuOpened}
+        />
       </div>
     </>
   );

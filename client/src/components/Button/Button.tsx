@@ -19,9 +19,14 @@ type ButtonProps = {
   children?: string;
   fullWidth?: boolean;
   disabled?: boolean;
+  textColor?: string;
   onClick?: () => any;
   className?: any;
 };
+
+interface StyleProps {
+  textColor: string | undefined;
+}
 
 const useStyles = makeStyles({
   button: {
@@ -29,8 +34,7 @@ const useStyles = makeStyles({
       textTransform: 'none',
       borderRadius: 4,
       fontWeight: 600,
-      padding: '12px 0',
-      color: WHITE,
+      color: ({ textColor }: StyleProps) => textColor || WHITE,
       fontSize: 16,
     },
   },
@@ -46,9 +50,10 @@ const Button = ({
   disabled,
   type,
   className,
+  textColor,
   onClick,
 }: ButtonProps) => {
-  const classes = useStyles();
+  const classes = useStyles({ textColor });
 
   return (
     <MuiButton
