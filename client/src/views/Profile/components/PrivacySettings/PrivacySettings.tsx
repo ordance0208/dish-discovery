@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Formik, FormikProps } from 'formik';
+import { useEffect, useState } from 'react';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TEXT_DARK } from '../../../../theme';
 import useUserPrivacySettings from '../../../../hooks/settings/useUserPrivacySettings';
@@ -7,10 +8,16 @@ import Typography from '../../../../components/Typography';
 import PasswordField from '../../../../components/PasswordField';
 import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
+import { PasswordPayload } from '../../../../models/user/userSettingsPayloads';
+import { IResponse } from '../../../../models/response';
+import Alert from '../../../../components/Alert';
 
-const useStyles = makeStyles({
+const useStyles =  makeStyles((theme: Theme) => ({
   privacySettingsContent: {
     width: 500,
+    [theme.breakpoints.down('md')]: {
+      width: '90%',
+    },
     margin: '50px auto',
   },
   subtitle: {
@@ -38,19 +45,33 @@ const useStyles = makeStyles({
   changeButton: {
     alignSelf: 'flex-start',
   },
-});
+  alert: {
+    marginTop: 20
+  }
+}));
 
 const PrivacySettings = () => {
   const classes = useStyles();
+  const [action, setAction] = useState<'logout' | 'delete' | null>(null);
+
+  const [response, setResponse] = useState<IResponse | undefined>();
+
+  useEffect(() => {
+    if (!response) return;
+
+    setTimeout(() => {
+      setResponse(undefined);
+    }, 5000);
+  }, [response]);
 
   const {
     initialValues,
     validationSchema,
+    handlePasswordChange,
     handleLogoutAllSessions,
     handleDeleteAccount,
-  } = useUserPrivacySettings();
+  } = useUserPrivacySettings(setResponse);
 
-  const [action, setAction] = useState<'logout' | 'delete' | null>(null);
 
   return (
     <div className={classes.privacySettingsContent}>
@@ -62,13 +83,19 @@ const PrivacySettings = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values: any) => console.log(values)}
+            onSubmit={(values: any, { resetForm }: FormikHelpers<any>) =>
+              handlePasswordChange(values, resetForm)
+            }
           >
-            {(props: FormikProps<any>) => {
+            {({
+              handleSubmit,
+              dirty,
+              values: { currentPassword, newPassword, confirmNewPassword },
+            }: FormikProps<PasswordPayload>) => {
               return (
                 <form
                   className={classes.passwordFieldContainer}
-                  onSubmit={props.handleSubmit}
+                  onSubmit={handleSubmit}
                 >
                   <PasswordField
                     name='currentPassword'
@@ -81,7 +108,12 @@ const PrivacySettings = () => {
                   />
                   <Button
                     className={classes.changeButton}
-                    onClick={() => props.handleSubmit()}
+                    disabled={
+                      !dirty ||
+                      !currentPassword ||
+                      !newPassword ||
+                      !confirmNewPassword
+                    }
                     type='submit'
                   >
                     Change password
@@ -113,6 +145,11 @@ const PrivacySettings = () => {
           Delete account
         </Button>
       </div>
+      {response && (
+            <Alert className={classes.alert} severity={response.severity}>
+              {response.text}
+            </Alert>
+          )}
       <Dialog
         open={!!action}
         onClose={() => setAction(null)}
