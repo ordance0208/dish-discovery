@@ -26,8 +26,9 @@ export const useAuthActions = () => {
         const data = await userRegister(body);
         const payload = data;
         dispatch({ type: types.SIGN_UP_SUCCESS, payload });
-      } catch (err) {
+      } catch (err: any) {
         dispatch({ type: types.SIGN_UP_FAIL });
+        throw new Error(err.response.data.error);
       }
     },
     [dispatch]
@@ -122,6 +123,10 @@ export const useAuthActions = () => {
     }
   }, [dispatch]);
 
+  const deleteAccount = useCallback(async () => {
+    dispatch({ type: types.SIGN_OUT_SUCCESS });
+  }, [dispatch]);
+
   return {
     registerUser,
     loginUser,
@@ -131,5 +136,6 @@ export const useAuthActions = () => {
     updateUserInfo,
     uploadUserAvatar,
     removeUserAvatar,
+    deleteAccount,
   };
 };

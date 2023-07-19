@@ -32,7 +32,7 @@ const useUserPrivacySettings = (
   });
 
   const navigate = useNavigate();
-  const { logoutAllSessions } = useAuthActions();
+  const { logoutAllSessions, deleteAccount } = useAuthActions();
 
   const handleErrorResponse = (text: string) => {
     setResponse({ severity: 'warning', text });
@@ -56,18 +56,18 @@ const useUserPrivacySettings = (
   };
 
   const handleLogoutAllSessions = async () => {
-   try {
-    await logoutAllSessions();
-    navigate(PATHS.HOME);
-   } catch(err: any) {
-    handleErrorResponse('Error logging out of all sessions!');
-   }
+    try {
+      await logoutAllSessions();
+      navigate(PATHS.HOME);
+    } catch (err: any) {
+      handleErrorResponse('Error logging out of all sessions!');
+    }
   };
 
   const handleDeleteAccount = async () => {
     try {
       await deleteUserAccount();
-      localStorage.removeItem('token');
+      deleteAccount();
       navigate(PATHS.HOME);
     } catch (err: any) {
       handleErrorResponse('Error deleting account!');
