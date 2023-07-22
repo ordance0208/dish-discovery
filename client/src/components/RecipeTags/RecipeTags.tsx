@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
 import { isEmpty } from 'lodash';
-import { useFormikContext } from 'formik';
-import { Theme } from '@mui/material';
+import { useField, useFormikContext } from 'formik';
+import { FormHelperText, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Chip from '../Chip';
 
@@ -40,10 +41,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: 15.5,
     flex: 1,
   },
+  helperText: {
+    margin: '3px 14px 0 14px',
+    color: theme.palette.error.main,
+  },
+  error: {
+    borderColor: theme.palette.error.main,
+    '&:focus-within': {
+      outline: `2px solid ${theme.palette.error.main}`,
+      border: 'none',
+    },
+  },
 }));
 
 const RecipeTags = ({ name }: Props) => {
   const classes = useStyles();
+  const [, meta] = useField(name!);
   const { setFieldValue } = useFormikContext();
 
   const [tags, setTags] = useState<string[]>([]);
@@ -76,28 +89,37 @@ const RecipeTags = ({ name }: Props) => {
   };
 
   return (
-    <div
-      className={classes.recipeTagsWrapper}
-      onClick={() => inputRef?.current?.focus()}
-    >
-      {tags.map((tag: string) => (
-        <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-      ))}
-      <input
-        ref={inputRef}
-        className={classes.input}
-        value={inputValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          if (e.target.value === ',') return;
-          setInputValue(e.target.value);
-        }}
-        placeholder={
-          isEmpty(tags)
-            ? 'Enter at least one tag (separate the tags with a comma)'
-            : undefined
-        }
-        onKeyDown={handleAddTag}
-      />
+    <div>
+      <div
+        className={clsx(classes.recipeTagsWrapper, {
+          [classes.error]: !!meta.error && meta.touched,
+        })}
+        onClick={() => inputRef?.current?.focus()}
+      >
+        {tags.map((tag: string) => (
+          <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
+        ))}
+        <input
+          ref={inputRef}
+          className={classes.input}
+          value={inputValue}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (e.target.value === ',') return;
+            setInputValue(e.target.value);
+          }}
+          placeholder={
+            isEmpty(tags)
+              ? 'Enter at least one tag (separate the tags with a comma)'
+              : undefined
+          }
+          onKeyDown={handleAddTag}
+        />
+      </div>
+      {!!meta.error && meta.touched && (
+        <FormHelperText className={classes.helperText}>
+          {meta.error}
+        </FormHelperText>
+      )}
     </div>
   );
 };
