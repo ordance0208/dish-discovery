@@ -1,7 +1,7 @@
-import { TextField as MuiTextField } from '@mui/material';
+import { TextField as MuiTextField, BaseTextFieldProps } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-export interface TextFieldProps {
+export interface TextFieldProps extends BaseTextFieldProps {
   disabled?: boolean;
   onChange?: any;
   value?: string | number;
@@ -14,16 +14,16 @@ export interface TextFieldProps {
   name?: string;
   error?: boolean;
   errorText?: string | boolean;
-  className?: string
-  touched?: boolean
-};
+  className?: string;
+  touched?: boolean;
+}
 
 const useStyles = makeStyles({
   textField: {
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderRadius: 4,               
-      },      
+        borderRadius: 4,
+      },
     },
     '& .MuiFormControl-root': {
       height: 50,
@@ -32,23 +32,23 @@ const useStyles = makeStyles({
       height: 50,
     },
     '& .MuiFormLabel-root': {
-      transform: 'translate(14px, 14px)'
+      transform: 'translate(14px, 14px)',
     },
     '& .MuiInputLabel-root': {
-      transform: 'translate(14px, 14px)'
+      transform: 'translate(14px, 14px)',
     },
     '& .MuiFormLabel-root.Mui-focused': {
-      transform: 'translate(14px, -9px) scale(0.75)'
+      transform: 'translate(14px, -9px) scale(0.75)',
     },
     '& .MuiInputLabel-root.Mui-focused': {
-      transform: 'translate(14px, -9px) scale(0.75)'
+      transform: 'translate(14px, -9px) scale(0.75)',
     },
     '& .MuiFormLabel-filled': {
-      transform: 'translate(14px, -9px) scale(0.75)'
+      transform: 'translate(14px, -9px) scale(0.75)',
     },
     '& .MuiInputLabel-filled': {
-      transform: 'translate(14px, -9px) scale(0.75)'
-    }
+      transform: 'translate(14px, -9px) scale(0.75)',
+    },
   },
 });
 
