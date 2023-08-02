@@ -1,14 +1,17 @@
 import Navbar from './components/Navbar';
 import Router from './Router';
 import AuthProvider from './utils/AuthContext/context';
+import RecipeProvider from './utils/RecipeContext/context';
 
 function App() {
   return (
     <div className='App'>
-      <AuthProvider>
-        <Navbar />
-        <Router />
-      </AuthProvider>
+      <RecipeProvider>
+        <AuthProvider>
+          <Navbar />
+          <Router />
+        </AuthProvider>
+      </RecipeProvider>
     </div>
   );
 }
