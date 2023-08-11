@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
+import clsx from 'clsx';
 import { Slate, Editable, withReact } from 'slate-react';
-import { createEditor } from 'slate';
-import { useFormikContext } from 'formik';
-import { Theme } from '@mui/material';
+import { createEditor, Descendant } from 'slate';
+import { useField, useFormikContext } from 'formik';
+import { FormHelperText, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { isEditorEmpty } from '../../utils/editor.helpers';
 
 interface Props {
   name?: string;
-  editorValue?: any;
+  editorValue?: Descendant[];
+  error?: boolean;
+  touched?: boolean;
 }
 
 const initialValue = [
@@ -29,37 +33,61 @@ const useStyles = makeStyles((theme: Theme) => ({
       border: 'none',
     },
   },
+  error: {
+    borderColor: theme.palette.error.main,
+    '&:focus-within': {
+      outline: `2px solid ${theme.palette.error.main}`,
+      border: 'none',
+    },
+  },
   editable: {
     outline: 'none',
     fontFamily: 'sans-serif',
   },
+  helperText: {
+    margin: '3px 14px 0 14px',
+    color: theme.palette.error.main,
+  },
 }));
 
-const Editor = ({ name, editorValue }: Props) => {
+const Editor = ({ name, editorValue, error, touched }: Props) => {
   const classes = useStyles();
+  const [, meta] = useField('description');
   const { setFieldValue } = useFormikContext();
 
   const [editor] = useState(() => withReact(createEditor()));
   const [value, setValue] = useState(editorValue || initialValue);
 
   useEffect(() => {
-    setFieldValue(name!, value);
+    setFieldValue('description', value);
+    // eslint-disable-next-line
   }, [value]);
 
   return (
-    <div className={classes.editorWrapper}>
-      <Slate
-        editor={editor}
-        initialValue={initialValue}
-        onChange={(value: any) => {
-          setValue(value);
-        }}
+    <div>
+      <div
+        className={clsx(classes.editorWrapper, {
+          [classes.error]: error && touched && isEditorEmpty(value),
+        })}
       >
-        <Editable
-          className={classes.editable}
-          placeholder='Recipe description'
-        />
-      </Slate>
+        <Slate
+          editor={editor}
+          initialValue={initialValue}
+          onChange={(newValue: any) => {
+            setValue(newValue);
+          }}
+        >
+          <Editable
+            className={classes.editable}
+            placeholder='Recipe description'
+          />
+        </Slate>
+      </div>
+      {meta.error && meta.touched && isEditorEmpty(value) && (
+        <FormHelperText className={classes.helperText}>
+          {meta.error}
+        </FormHelperText>
+      )}
     </div>
   );
 };
