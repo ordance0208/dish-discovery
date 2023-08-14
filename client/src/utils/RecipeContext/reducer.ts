@@ -28,7 +28,6 @@ export const recipeReducer = (state: State, action: Action<any>): State => {
     case types.FETCH_SINGLE_RECIPE:
       return { ...state, loading: true };
     case types.FETCH_SINGLE_RECIPE_SUCCESS:
-      console.log('🚀', action.payload);
       return { ...state, singleRecipe: action.payload, loading: false };
     case types.FETCH_SINGLE_RECIPE_FAIL:
       return { ...state, loading: false };
