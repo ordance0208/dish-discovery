@@ -5,26 +5,31 @@ export const menuPaths: Path[] = [
   {
     label: 'Home',
     to: PATHS.HOME,
-    availableWhenLoggedIn: true
+    availableWhenLoggedIn: true,
+    protectedRoute: false,
   },
   {
     label: 'Recipes',
     to: PATHS.RECIPES,
-    availableWhenLoggedIn: true
+    availableWhenLoggedIn: true,
+    protectedRoute: false,
   },
   {
     label: 'Submit',
     to: PATHS.RECIPE_SUBMIT,
-    availableWhenLoggedIn: true
+    availableWhenLoggedIn: true,
+    protectedRoute: true,
   },
   {
     label: 'Sign In',
     to: AUTH_PATHS.LOGIN,
-    availableWhenLoggedIn: false
+    availableWhenLoggedIn: false,
+    protectedRoute: false,
   },
   {
     label: 'Sign Up',
     to: AUTH_PATHS.REGISTER,
-    availableWhenLoggedIn: false
+    availableWhenLoggedIn: false,
+    protectedRoute: false,
   },
 ];
