@@ -88,15 +88,20 @@ const Navbar = () => {
         <div className={classes.header}>
           <img className={classes.logo} src={logo} alt='navbar logo' />
           <nav className={classes.nav}>
-            {menuPaths.map(({ to, label, availableWhenLoggedIn }: Path) => {
-              if (!availableWhenLoggedIn && localStorage.getItem('token'))
-                return null;
-              return (
-                <Link to={to} key={to}>
-                  {label}
-                </Link>
-              );
-            })}
+            {menuPaths.map(
+              ({ to, label, availableWhenLoggedIn, protectedRoute }: Path) => {
+                if (
+                  (!availableWhenLoggedIn && localStorage.getItem('token')) ||
+                  (protectedRoute && !localStorage.getItem('token'))
+                )
+                  return null;
+                return (
+                  <Link to={to} key={to}>
+                    {label}
+                  </Link>
+                );
+              }
+            )}
             {user && <ProfileDropdown />}
           </nav>
           <div className={classes.hamburgerButtonWrapper}>
