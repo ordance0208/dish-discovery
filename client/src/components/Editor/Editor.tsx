@@ -72,8 +72,8 @@ const Editor = ({ name, editorValue, error, touched }: Props) => {
       >
         <Slate
           editor={editor}
-          initialValue={initialValue}
-          onChange={(newValue: any) => {
+          initialValue={initialValue as Descendant[]}
+          onChange={(newValue: Descendant[]) => {
             setValue(newValue);
           }}
         >
