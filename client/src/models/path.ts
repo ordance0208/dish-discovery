@@ -1,5 +1,6 @@
 export type Path = {
   to: string;
   label: string;
-  availableWhenLoggedIn: boolean
+  availableWhenLoggedIn: boolean;
+  protectedRoute: boolean;
 };
