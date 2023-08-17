@@ -64,6 +64,7 @@ const Editor = ({ name, editorValue, error, touched }: Props) => {
     editor.children = field.value;
 
     setValue(field.value);
+    // eslint-disable-next-line
   }, [field.value]);
 
   useEffect(() => {

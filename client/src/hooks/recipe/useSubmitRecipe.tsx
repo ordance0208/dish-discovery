@@ -64,6 +64,7 @@ const useSubmitRecipe = (
     };
 
     fetchRecipe();
+    // eslint-disable-next-line
   }, [id]);
 
   const validationSchema = Yup.object().shape({

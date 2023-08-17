@@ -183,6 +183,7 @@ const Droppable = ({
         </div>
       </>
     ),
+    // eslint-disable-next-line
     [image, file]
   );
 };
