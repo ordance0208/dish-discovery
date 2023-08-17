@@ -184,7 +184,7 @@ const Droppable = ({
       </>
     ),
     // eslint-disable-next-line
-    [image, file]
+    [image, file, fileError, customError]
   );
 };
 
