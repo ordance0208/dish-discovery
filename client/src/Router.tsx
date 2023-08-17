@@ -8,6 +8,9 @@ import Home from './views/Home';
 import SignUp from './views/Auth/SignUp';
 import SignIn from './views/Auth/SignIn';
 import ProfileSettings from './views/Profile/ProfileSettings';
+import RecipeSubmit from './views/RecipeSubmit';
+import SpecificRecipe from './views/SpecificRecipe';
+import Recipes from './views/Recipes';
 
 const Router = () => {
   const { getCurrentUser } = useAuthActions();
@@ -24,12 +27,23 @@ const Router = () => {
   return (
     <Routes>
       <Route path={PATHS.HOME} element={<Home />} />
+      <Route
+        element={<SpecificRecipe />}
+        path={`${PATHS.SPECIFIC_RECIPE}/:id`}
+      />
+      <Route element={<Recipes />} path={PATHS.RECIPES} />
       <Route element={<PublicRoute />}>
         <Route element={<SignUp />} path={AUTH_PATHS.REGISTER} />
         <Route element={<SignIn />} path={AUTH_PATHS.LOGIN} />
       </Route>
       <Route element={<PrivateRoute />}>
         <Route element={<ProfileSettings />} path={PATHS.PROFILE_SETTINGS} />
+      </Route>
+      <Route element={<PrivateRoute />}>
+        <Route element={<RecipeSubmit />} path={PATHS.RECIPE_SUBMIT} />
+      </Route>
+      <Route element={<PrivateRoute />}>
+        <Route element={<RecipeSubmit />} path={`${PATHS.EDIT_RECIPE}/:id`} />
       </Route>
       <Route path={PATHS.PROFILE_SETTINGS} element={<ProfileSettings />} />
     </Routes>

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   userAvatar: {
     borderRadius: '50%',
     height: 200,
-    width: 'auto',
+    width: 200,
     display: 'block',
     margin: 'auto',
   },
