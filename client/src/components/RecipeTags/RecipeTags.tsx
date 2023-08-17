@@ -56,15 +56,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const RecipeTags = ({ name }: Props) => {
   const classes = useStyles();
-  const [, meta] = useField(name!);
+  const [field, meta] = useField(name!);
   const { setFieldValue } = useFormikContext();
 
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(field.value || []);
   const [inputValue, setInputValue] = useState<string>('');
 
   useEffect(() => {
     setFieldValue(name!, tags);
   }, [tags]);
+
+  useEffect(() => {
+    if (!field.value) return;
+    setTags(field.value);
+  }, [field.value]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
