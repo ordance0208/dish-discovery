@@ -50,7 +50,7 @@ const Recipes = () => {
       ) : (
         <div className={classes.cardGrid}>
           {recipes.map((recipe: any) => {
-            return <AsideCard post={recipe} />;
+            return <AsideCard recipe={recipe} />;
           })}
         </div>
       )}
