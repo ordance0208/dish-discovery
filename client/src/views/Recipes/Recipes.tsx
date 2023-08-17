@@ -3,8 +3,8 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecipeData } from '../../utils/RecipeContext/selectors';
 import { useRecipeActions } from '../../utils/RecipeContext/actions';
-import Typography from '../../components/Typography';
 import AsideCard from '../../components/AsideCard';
+import RecipesSkeleton from './RecipesSkeleton';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Recipes = () => {
   const classes = useStyles();
-  const { fetchAllRecipes } = useRecipeActions();
+  const { fetchAllRecipes, resetAllRecipes } = useRecipeActions();
   const { recipes, loading } = useRecipeData();
 
   useEffect(() => {
@@ -33,13 +33,20 @@ const Recipes = () => {
       await fetchAllRecipes();
     };
 
-    fetchRecipes();
+    if (!loading) {
+      fetchRecipes();
+    }
+
+    return () => {
+      resetAllRecipes();
+    };
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className={classes.root}>
       {loading || !recipes ? (
-        <Typography>Loading...</Typography>
+        <RecipesSkeleton />
       ) : (
         <div className={classes.cardGrid}>
           {recipes.map((recipe: any) => {
