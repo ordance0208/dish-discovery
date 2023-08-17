@@ -42,6 +42,9 @@ const Router = () => {
       <Route element={<PrivateRoute />}>
         <Route element={<RecipeSubmit />} path={PATHS.RECIPE_SUBMIT} />
       </Route>
+      <Route element={<PrivateRoute />}>
+        <Route element={<RecipeSubmit />} path={`${PATHS.EDIT_RECIPE}/:id`} />
+      </Route>
       <Route path={PATHS.PROFILE_SETTINGS} element={<ProfileSettings />} />
     </Routes>
   );
