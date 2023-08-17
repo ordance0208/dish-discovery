@@ -31,6 +31,20 @@ export const recipeReducer = (state: State, action: Action<any>): State => {
       return { ...state, singleRecipe: action.payload, loading: false };
     case types.FETCH_SINGLE_RECIPE_FAIL:
       return { ...state, loading: false };
+
+    // Delete Recipe Cases
+    case types.DELETE_RECIPE:
+      return { ...state, loading: true };
+    case types.DELETE_RECIPE_SUCCESS:
+      return { ...state, singleRecipe: null, loading: false };
+    case types.DELETE_RECIPE_FAIL:
+      return { ...state, loading: false };
+
+    // Reset Recipe Cases
+    case types.RESET_ALL_RECIPES:
+      return { ...state, recipes: [] };
+    case types.RESET_SINGLE_RECIPE:
+      return { ...state, singleRecipe: null, loading: false };
   }
 
   return state;
