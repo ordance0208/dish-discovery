@@ -5,6 +5,7 @@ export const useRecipeData = () => {
 
   return {
     recipes: state.recipes,
+    latestRecipes: state.latestRecipes,
     singleRecipe: state.singleRecipe || null,
     loading: state.loading,
   };

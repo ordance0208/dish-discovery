@@ -30,7 +30,10 @@ export const useRecipeActions = () => {
       dispatch({ type: types.FETCH_SINGLE_RECIPE });
       try {
         const data = await getSingleRecipe(recipeId);
-        dispatch({ type: types.FETCH_SINGLE_RECIPE_SUCCESS, payload: data });
+        dispatch({
+          type: types.FETCH_SINGLE_RECIPE_SUCCESS,
+          payload: data,
+        });
       } catch (err: any) {
         dispatch({ type: types.FETCH_SINGLE_RECIPE_FAIL });
       }

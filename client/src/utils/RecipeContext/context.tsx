@@ -1,5 +1,5 @@
 import { createContext, useReducer, useContext } from 'react';
-import { DEFAULT_STATE, recipeReducer, State } from './reducer';
+import { DEFAULT_STATE, recipeReducer } from './reducer';
 
 const RecipeContext = createContext<any>(DEFAULT_STATE);
 

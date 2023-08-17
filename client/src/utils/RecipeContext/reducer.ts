@@ -5,11 +5,13 @@ import { IRecipe } from '../../models/recipe';
 export interface State {
   recipes: IRecipe[];
   singleRecipe: IRecipe | null;
+  latestRecipes: IRecipe[];
   loading: boolean;
 }
 
 export const DEFAULT_STATE: State = {
   recipes: [],
+  latestRecipes: [],
   singleRecipe: null,
   loading: false,
 };
@@ -28,7 +30,12 @@ export const recipeReducer = (state: State, action: Action<any>): State => {
     case types.FETCH_SINGLE_RECIPE:
       return { ...state, loading: true };
     case types.FETCH_SINGLE_RECIPE_SUCCESS:
-      return { ...state, singleRecipe: action.payload, loading: false };
+      return {
+        ...state,
+        singleRecipe: action.payload.recipe,
+        latestRecipes: action.payload.latestRecipes,
+        loading: false,
+      };
     case types.FETCH_SINGLE_RECIPE_FAIL:
       return { ...state, loading: false };
 
