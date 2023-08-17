@@ -52,11 +52,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Editor = ({ name, editorValue, error, touched }: Props) => {
   const classes = useStyles();
-  const [, meta] = useField('description');
+  const [field, meta] = useField('description');
   const { setFieldValue } = useFormikContext();
 
   const [editor] = useState(() => withReact(createEditor()));
   const [value, setValue] = useState(editorValue || initialValue);
+
+  useEffect(() => {
+    if (!field.value) return;
+
+    editor.children = field.value;
+
+    setValue(field.value);
+  }, [field.value]);
 
   useEffect(() => {
     setFieldValue('description', value);
