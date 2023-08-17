@@ -6,4 +6,5 @@ export interface RecipeFields {
   preparationTime: number;
   tags: never[];
   description: Descendant[];
+  image?: string | undefined;
 }
