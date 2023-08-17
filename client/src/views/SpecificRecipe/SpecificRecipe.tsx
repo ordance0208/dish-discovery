@@ -129,6 +129,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   tagsWrapper: {
     display: 'flex',
+    flexWrap: 'wrap',
     gap: 16,
     padding: 12,
     border: '1px solid lightgray',
