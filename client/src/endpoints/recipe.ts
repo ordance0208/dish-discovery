@@ -12,6 +12,10 @@ export const getSingleRecipe = function (id: string) {
   return api.get(`/recipes/${id}`).then((res) => res.data);
 };
 
+export const getSingleRecipeForEdit = function (id: string) {
+  return api.get(`/recipes/edit/${id}`).then((res) => res.data);
+};
+
 export const likeRecipe = function (id: string, likeStatus: boolean) {
   return api
     .put(`/recipes/${id}/like`, undefined, { params: { status: likeStatus } })
