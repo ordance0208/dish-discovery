@@ -1,14 +1,20 @@
+import { SnackbarProvider } from 'notistack';
+import AuthProvider from './utils/AuthContext/context';
+import RecipeProvider from './utils/RecipeContext/context';
 import Navbar from './components/Navbar';
 import Router from './Router';
-import AuthProvider from './utils/AuthContext/context';
 
 function App() {
   return (
     <div className='App'>
-      <AuthProvider>
-        <Navbar />
-        <Router />
-      </AuthProvider>
+      <SnackbarProvider>
+        <RecipeProvider>
+          <AuthProvider>
+            <Navbar />
+            <Router />
+          </AuthProvider>
+        </RecipeProvider>
+      </SnackbarProvider>
     </div>
   );
 }

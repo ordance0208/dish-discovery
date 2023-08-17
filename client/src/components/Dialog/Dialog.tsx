@@ -59,7 +59,15 @@ const Dialog = ({
   const classes = useStyles();
 
   return (
-    <MuiDialog classes={{ paper: classes.dialog }} open={open}>
+    <MuiDialog
+      classes={{ paper: classes.dialog }}
+      open={open}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      }}
+    >
       <DialogTitle classes={{ root: classes.title }}>{title}</DialogTitle>
       <DialogContent classes={{ root: classes.content }}>
         {children}
