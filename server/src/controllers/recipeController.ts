@@ -3,6 +3,7 @@ import multer from 'multer';
 import Recipe from '../models/Recipe';
 import { AuthRequest } from '../middleware/auth';
 import { recipePayloadSchema } from '../validation/recipe';
+import { isEditorEmpty } from '../validation/recipeDescription';
 
 export const recipe = multer({
   dest: 'recipes',
@@ -17,6 +18,15 @@ export const recipe = multer({
   },
 });
 
+export const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'recipes');
+  },
+  filename(req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
 export const createRecipe = async (req: AuthRequest, res: Response) => {
   if (!req.file) {
     return res.status(400).send({ error: 'Invalid data' });
@@ -24,6 +34,11 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
 
   try {
     await recipePayloadSchema.validateAsync(req.body);
+
+    if (isEditorEmpty(req.body.description)) {
+      return res.status(400).send({ error: 'Invalid data' });
+    }
+
     const recipe = new Recipe({
       ...req.body,
       user: req.user._id,
@@ -31,22 +46,77 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
     });
     await recipe.save();
     res.status(201).send(recipe);
-    console.log(recipe);
   } catch (err: any) {
-    console.log(err);
-    return res.status(400).send({ error: err });
+    return res.status(400).send(err);
   }
 
   res.status(200).send();
 };
 
+export const getRecipes = async (req: AuthRequest, res: Response) => {
+  try {
+    const recipes = await (
+      await Recipe.find().populate({ path: 'user' })
+    ).reverse();
+
+    res.send(recipes);
+  } catch (err: any) {
+    return res.status(500).send(err);
+  }
+};
+
 export const getRecipe = async (req: AuthRequest, res: Response) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
-    res.send(recipe);
+    const latestRecipes = await Recipe.find(
+      { _id: { $ne: recipe?._id } },
+      {
+        description: 0,
+        ingredients: 0,
+        tags: 0,
+        updatedAt: 0,
+        likes: 0,
+        views: 0,
+      },
+      {
+        sort: { createdAt: -1 },
+        limit: 3,
+      }
+    ).populate({ path: 'user' });
+    if (!recipe) {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
+
+    recipe.views = recipe.views + 1;
+    await recipe.save();
+    await recipe?.populate({ path: 'user' });
+
+    res.send({ recipe, latestRecipes });
   } catch (err: any) {
     if (err.name === 'CastError') {
       return res.status(404).send();
+    }
+    return res.status(500).send(err);
+  }
+};
+
+export const getRecipeForEdit = async (req: AuthRequest, res: Response) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
+
+    if (req.user._id.toString() !== recipe.user.toString()) {
+      return res
+        .status(403)
+        .send({ error: 'You are unable to edit this recipe' });
+    }
+
+    res.send(recipe);
+  } catch (err: any) {
+    if (err.name === 'CastError') {
+      return res.status(404).send({ error: 'Recipe not found' });
     }
     return res.status(500).send(err);
   }
@@ -69,9 +139,41 @@ export const editRecipe = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const likeRecipe = async (req: AuthRequest, res: Response) => {
+  const action = req.query.status === 'true' ? 1 : -1;
+
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
+    if (action === 1) {
+      if (recipe.likes.includes(req.user._id)) {
+        return res.status(400).send({ error: 'Recipe already liked' });
+      }
+      recipe.likes = [...recipe.likes, req.user._id];
+    } else {
+      console.log(recipe.likes);
+      const index = recipe.likes.indexOf(req.user._id);
+      if (index === -1) {
+        return res.status(400).send({ error: 'Recipe already unliked' });
+      }
+      recipe.likes.splice(index, 1);
+    }
+    await recipe.save();
+    res.send(recipe);
+  } catch (err: any) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
+};
+
 export const deleteRecipe = async (req: AuthRequest, res: Response) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
+    if (req.user._id.toString() !== recipe?.user.toString()) {
+      return res.status(403).send({ error: 'Authorization failed' });
+    }
     await recipe?.deleteOne();
     res.send(recipe);
   } catch (err: any) {
