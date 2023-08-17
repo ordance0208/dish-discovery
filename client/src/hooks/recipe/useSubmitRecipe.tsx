@@ -1,12 +1,24 @@
+import { useEffect, useState } from 'react';
+import { isEqual } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Descendant } from 'slate';
-import { createRecipe } from '../../endpoints/recipe';
+import useSnackbar from '../../hooks/useSnackbar';
+import {
+  createRecipe,
+  editRecipe,
+  getSingleRecipeForEdit,
+} from '../../endpoints/recipe';
 import { RecipeFields } from '../../models/recipe/recipePayload';
-import { IResponse } from '../../models/response';
+import { PATHS } from '../../routes';
 
 const useSubmitRecipe = (
-  setRecipeSubmitted: React.Dispatch<React.SetStateAction<string | null>>
+  setRecipeSubmitted: React.Dispatch<React.SetStateAction<string | null>>,
+  id: string | undefined
 ) => {
+  const queueSnackbar = useSnackbar();
+  const navigate = useNavigate();
+
   const initialValues = {
     title: '',
     description: [
@@ -16,6 +28,43 @@ const useSubmitRecipe = (
     preparationTime: 0,
     tags: [],
   };
+
+  const [formValues, setFormValues] = useState(initialValues);
+
+  useEffect(() => {
+    if (!id && !isEqual(formValues, initialValues))
+      return setFormValues(initialValues);
+    if (!id) return;
+
+    const fetchRecipe = async () => {
+      try {
+        const recipe = await getSingleRecipeForEdit(id);
+        const {
+          title,
+          description,
+          ingredients,
+          preparationTime,
+          tags,
+          image,
+        } = recipe;
+
+        const recipeData = {
+          title,
+          description,
+          ingredients,
+          preparationTime,
+          tags,
+          image,
+        };
+        setFormValues(recipeData);
+      } catch (err: any) {
+        queueSnackbar({ text: err.response.data.error, severity: 'error' });
+        navigate(PATHS.RECIPES, { replace: true });
+      }
+    };
+
+    fetchRecipe();
+  }, [id]);
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Enter recipe title'),
@@ -38,15 +87,14 @@ const useSubmitRecipe = (
 
   const onSubmit = async (
     values: RecipeFields,
-    recipeImage: File,
-    setSubmitting: (isSubmitting: boolean) => void,
-    setResponse: React.Dispatch<React.SetStateAction<IResponse | undefined>>
+    recipeImage: File | undefined,
+    setSubmitting: (isSubmitting: boolean) => void
   ) => {
     setSubmitting(true);
     const formData = new FormData();
 
     formData.append('title', values.title);
-    formData.append('recipe', recipeImage);
+    recipeImage && formData.append('recipe', recipeImage);
     formData.append(
       'preparationTime',
       values.preparationTime as unknown as string
@@ -71,16 +119,21 @@ const useSubmitRecipe = (
     });
 
     try {
-      const data = await createRecipe(formData);
-      setRecipeSubmitted(data._id);
+      if (id) {
+        const data = await editRecipe(id, formData);
+        setRecipeSubmitted(data._id);
+      } else {
+        const data = await createRecipe(formData);
+        setRecipeSubmitted(data._id);
+      }
     } catch (err: any) {
-      setResponse({ text: err.response.data.error, severity: 'warning' });
+      queueSnackbar({ text: err.response.data.error, severity: 'error' });
     } finally {
       setSubmitting(false);
     }
   };
 
-  return { initialValues, validationSchema, onSubmit };
+  return { initialValues: formValues, validationSchema, onSubmit };
 };
 
 export default useSubmitRecipe;
