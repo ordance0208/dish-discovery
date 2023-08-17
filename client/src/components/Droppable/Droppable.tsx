@@ -1,7 +1,14 @@
-import React, { ChangeEvent, DragEvent, useState, useRef } from 'react';
+import React, {
+  ChangeEvent,
+  DragEvent,
+  useState,
+  useRef,
+  useMemo,
+} from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@mui/styles';
+import { useFormikContext } from 'formik';
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { UilTimes } from '@iconscout/react-unicons';
 import Typography from '../Typography';
 import IconButton from '../IconButton';
@@ -11,12 +18,16 @@ interface Props {
   fileError?: boolean;
   customError?: string;
   setFile?: React.Dispatch<React.SetStateAction<File | null>>;
+  image?: string | undefined;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
   droppableWrapper: {
     display: 'flex',
     gap: 32,
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
   },
   droppable: {
     borderRadius: 4,
@@ -28,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     '&:hover': {
       cursor: 'pointer',
+    },
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
     },
   },
   fileName: {
@@ -50,6 +64,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 150,
     objectFit: 'cover',
     alignSelf: 'flex-end',
+    [theme.breakpoints.down('md')]: {
+      alignSelf: 'flex-start',
+    },
   },
   input: {
     display: 'none',
@@ -66,11 +83,14 @@ const Droppable = ({
   text,
   fileError,
   customError,
+  image,
   setFile: setFileHoist,
 }: Props) => {
   const classes = useStyles();
   const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { setFieldValue } = useFormikContext();
 
   const handleUploadClick = () => {
     if (file) return;
@@ -107,6 +127,7 @@ const Droppable = ({
   const handleRemoveFile = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     handleImageUpload(null);
+    setFieldValue('image', undefined);
     inputRef!.current!.value = '';
   };
 
@@ -116,43 +137,53 @@ const Droppable = ({
     return url;
   };
 
-  return (
-    <>
-      <div className={classes.droppableWrapper}>
-        <div
-          className={clsx(classes.droppable, { [classes.error]: fileError })}
-          onClick={handleUploadClick}
-          onDrop={handleOnDrop}
-          onDragOver={handleDragOver}
-        >
-          <div className={classes.fileName}>
-            <Typography
-              className={clsx(classes.text, { [classes.errorText]: fileError })}
-            >
-              {(fileError && (customError || 'Upload file')) ||
-                file?.name ||
-                text ||
-                'Drag and drop or click to upload an image'}
-            </Typography>
-            {!!file && (
-              <IconButton onClick={handleRemoveFile}>
-                <UilTimes size={18} />
-              </IconButton>
-            )}
+  return useMemo(
+    () => (
+      <>
+        <div className={classes.droppableWrapper}>
+          <div
+            className={clsx(classes.droppable, { [classes.error]: fileError })}
+            onClick={handleUploadClick}
+            onDrop={handleOnDrop}
+            onDragOver={handleDragOver}
+          >
+            <div className={classes.fileName}>
+              <Typography
+                className={clsx(classes.text, {
+                  [classes.errorText]: fileError,
+                })}
+              >
+                {(fileError && (customError || 'Upload file')) ||
+                  (image && image.split('\\').pop()) ||
+                  file?.name ||
+                  text ||
+                  'Drag and drop or click to upload an image'}
+              </Typography>
+              {(!!file || image) && (
+                <IconButton onClick={handleRemoveFile}>
+                  <UilTimes size={18} />
+                </IconButton>
+              )}
+            </div>
+            <input
+              ref={inputRef}
+              className={classes.input}
+              type='file'
+              accept='image/*'
+              onChange={handleInputChange}
+            />
           </div>
-          <input
-            ref={inputRef}
-            className={classes.input}
-            type='file'
-            accept='image/*'
-            onChange={handleInputChange}
-          />
+          {(!!file || image) && (
+            <img
+              className={classes.uploadedImage}
+              src={file ? getImageUrl() : image}
+              alt='submitted'
+            />
+          )}
         </div>
-        {!!file && (
-          <img className={classes.uploadedImage} src={getImageUrl()} alt='submitted'/>
-        )}
-      </div>
-    </>
+      </>
+    ),
+    [image, file]
   );
 };
 
