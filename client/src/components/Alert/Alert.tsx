@@ -1,6 +1,12 @@
+import clsx from 'clsx';
 import { Alert as MuiAlert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import clsx from 'clsx';
+import {
+  UilCheckCircle,
+  UilExclamationCircle,
+  UilInfoCircle,
+  UilTimesCircle,
+} from '@iconscout/react-unicons';
 
 interface Props {
   children: JSX.Element | string;
@@ -27,11 +33,23 @@ const Alert = ({
 }: Props) => {
   const classes = useStyles();
 
+  const alertIcon =
+    severity === 'success' ? (
+      <UilCheckCircle />
+    ) : severity === 'error' ? (
+      <UilTimesCircle />
+    ) : severity === 'info' ? (
+      <UilInfoCircle />
+    ) : (
+      <UilExclamationCircle />
+    );
+
   return (
     <MuiAlert
       className={clsx(classes.alert, className)}
       variant={variant}
       severity={severity}
+      icon={alertIcon}
     >
       {children}
     </MuiAlert>
