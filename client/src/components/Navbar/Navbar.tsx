@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
@@ -74,6 +74,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     height: 70,
   },
+  activeLink: {
+    color: `${theme.palette.primary.main} !important`,
+  },
 }));
 
 const Navbar = () => {
@@ -96,9 +99,15 @@ const Navbar = () => {
                 )
                   return null;
                 return (
-                  <Link to={to} key={to}>
+                  <NavLink
+                    to={to}
+                    key={to}
+                    className={({ isActive }) =>
+                      isActive ? classes.activeLink : undefined
+                    }
+                  >
                     {label}
-                  </Link>
+                  </NavLink>
                 );
               }
             )}
