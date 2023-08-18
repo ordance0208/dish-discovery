@@ -16,12 +16,12 @@ type ButtonProps = {
   type?: 'submit' | 'reset' | 'button';
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
-  children?: string;
+  children?: string | React.ReactNode;
   fullWidth?: boolean;
   disabled?: boolean;
   textColor?: string;
   onClick?: () => any;
-  className?: any;
+  className?: string;
 };
 
 interface StyleProps {
