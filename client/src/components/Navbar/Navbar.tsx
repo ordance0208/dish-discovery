@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
@@ -10,6 +10,7 @@ import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
 import ProfileDropdown from '../ProfileDropdown';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
+import { PATHS } from '../../routes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -74,6 +75,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     height: 70,
   },
+  activeLink: {
+    color: `${theme.palette.primary.main} !important`,
+  },
+  imageLink: {
+    height: 38,
+  },
 }));
 
 const Navbar = () => {
@@ -86,7 +93,9 @@ const Navbar = () => {
     <>
       <header className={classes.root}>
         <div className={classes.header}>
-          <img className={classes.logo} src={logo} alt='navbar logo' />
+          <Link className={classes.imageLink} to={PATHS.RECIPES}>
+            <img className={classes.logo} src={logo} alt='navbar logo' />
+          </Link>
           <nav className={classes.nav}>
             {menuPaths.map(
               ({ to, label, availableWhenLoggedIn, protectedRoute }: Path) => {
@@ -96,9 +105,15 @@ const Navbar = () => {
                 )
                   return null;
                 return (
-                  <Link to={to} key={to}>
+                  <NavLink
+                    to={to}
+                    key={to}
+                    className={({ isActive }) =>
+                      isActive ? classes.activeLink : undefined
+                    }
+                  >
                     {label}
-                  </Link>
+                  </NavLink>
                 );
               }
             )}

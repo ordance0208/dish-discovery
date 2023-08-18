@@ -54,10 +54,42 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
 };
 
 export const getRecipes = async (req: AuthRequest, res: Response) => {
+  const { search, sortBy } = req.query;
+
+  let query: any = {};
+  let sort: any = {};
+
+  if (search) {
+    query.$or = [
+      { title: { $regex: new RegExp(search as string, 'i') } },
+      {
+        description: {
+          $elemMatch: {
+            type: 'paragraph',
+            children: {
+              $elemMatch: {
+                text: {
+                  $regex: new RegExp(search as string, 'i'),
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+  }
+
+  if (sortBy) {
+    const parts = (sortBy as string)?.split('_');
+    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+  } else {
+    sort.createdAt = -1;
+  }
+
   try {
-    const recipes = await (
-      await Recipe.find().populate({ path: 'user' })
-    ).reverse();
+    const recipes = await Recipe.find(query, null, {
+      sort,
+    }).populate({ path: 'user' });
 
     res.send(recipes);
   } catch (err: any) {
