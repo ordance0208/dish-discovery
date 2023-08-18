@@ -15,15 +15,18 @@ export const useRecipeActions = () => {
   const queueSnackbar = useSnackbar();
   const { dispatch } = useRecipeContext();
 
-  const fetchAllRecipes = useCallback(async () => {
-    dispatch({ type: types.FETCH_ALL_RECIPES });
-    try {
-      const data = await getAllRecipes();
-      dispatch({ type: types.FETCH_ALL_RECIPES_SUCCESS, payload: data });
-    } catch (err: any) {
-      dispatch({ type: types.FETCH_ALL_RECIPES_FAIL });
-    }
-  }, [dispatch]);
+  const fetchAllRecipes = useCallback(
+    async (query?: string, sortBy?: string) => {
+      dispatch({ type: types.FETCH_ALL_RECIPES });
+      try {
+        const data = await getAllRecipes(query, sortBy);
+        dispatch({ type: types.FETCH_ALL_RECIPES_SUCCESS, payload: data });
+      } catch (err: any) {
+        dispatch({ type: types.FETCH_ALL_RECIPES_FAIL });
+      }
+    },
+    [dispatch]
+  );
 
   const fetchSingleRecipe = useCallback(
     async (recipeId: string) => {
