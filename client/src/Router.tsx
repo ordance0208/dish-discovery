@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthActions } from './utils/AuthContext/actions';
 import { PATHS, AUTH_PATHS } from './routes';
 import PublicRoute from './utils/PublicRoute';
@@ -26,7 +26,8 @@ const Router = () => {
 
   return (
     <Routes>
-      <Route path={PATHS.HOME} element={<Home />} />
+      {/* <Route path={PATHS.HOME} element={<Home />} /> */}
+      <Route path='/' element={<Navigate to={PATHS.RECIPES} replace />} />
       <Route
         element={<SpecificRecipe />}
         path={`${PATHS.SPECIFIC_RECIPE}/:id`}

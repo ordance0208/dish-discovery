@@ -2,12 +2,12 @@ import { Path } from '../models/path';
 import { AUTH_PATHS, PATHS } from '../routes';
 
 export const menuPaths: Path[] = [
-  {
-    label: 'Home',
-    to: PATHS.HOME,
-    availableWhenLoggedIn: true,
-    protectedRoute: false,
-  },
+  // {
+  //   label: 'Home',
+  //   to: PATHS.HOME,
+  //   availableWhenLoggedIn: true,
+  //   protectedRoute: false,
+  // },
   {
     label: 'Recipes',
     to: PATHS.RECIPES,

@@ -4,8 +4,10 @@ export const createRecipe = function (formData: FormData) {
   return api.post('/recipes', formData).then((res) => res.data);
 };
 
-export const getAllRecipes = function () {
-  return api.get(`/recipes`).then((res) => res.data);
+export const getAllRecipes = function (query?: string, sortBy?: string) {
+  return api
+    .get(`/recipes`, { params: { search: query, sortBy } })
+    .then((res) => res.data);
 };
 
 export const getSingleRecipe = function (id: string) {
