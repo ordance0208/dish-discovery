@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import useSnackbar from '../useSnackbar';
 import { useAuthActions } from '../../utils/AuthContext/actions';
+import { LoginFields } from '../../models/authPayloads';
 import { IResponse } from '../../models/response';
 import { PATHS } from '../../routes';
 
@@ -9,6 +11,7 @@ const useSigninForm = (
 ) => {
   const { loginUser } = useAuthActions();
   const navigate = useNavigate();
+  const queueSnackbar = useSnackbar();
 
   const initialValues = {
     email: '',
@@ -22,10 +25,14 @@ const useSigninForm = (
     password: Yup.string().required('Enter your password'),
   });
 
-  const handleLogin = async (values: any) => {
+  const handleLogin = async (values: LoginFields) => {
     try {
       await loginUser(values);
-      navigate(PATHS.HOME);
+      navigate(PATHS.RECIPES);
+      queueSnackbar({
+        text: 'User authenticated successfully',
+        severity: 'success',
+      });
     } catch (err: any) {
       setResponse({ severity: 'warning', text: err.message });
     }
