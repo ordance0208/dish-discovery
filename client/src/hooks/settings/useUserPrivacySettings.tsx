@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import useSnackbar from '../useSnackbar';
 import { useAuthActions } from '../../utils/AuthContext/actions';
-import { IResponse } from '../../models/response';
 import { PasswordPayload } from '../../models/user/userSettingsPayloads';
 import { deleteUserAccount, updateUserPassword } from '../../endpoints/user';
 import { PATHS } from '../../routes';
 
-const useUserPrivacySettings = (
-  setResponse: React.Dispatch<React.SetStateAction<IResponse | undefined>>
-) => {
+const useUserPrivacySettings = () => {
+  const queueSnackbar = useSnackbar();
+
   const initialValues = {
     currentPassword: '',
     newPassword: '',
@@ -34,14 +34,6 @@ const useUserPrivacySettings = (
   const navigate = useNavigate();
   const { logoutAllSessions, deleteAccount } = useAuthActions();
 
-  const handleErrorResponse = (text: string) => {
-    setResponse({ severity: 'warning', text });
-  };
-
-  const handleSuccessResponse = (text: string) => {
-    setResponse({ severity: 'success', text });
-  };
-
   const handlePasswordChange = async (
     values: PasswordPayload,
     resetForm: () => void
@@ -49,9 +41,15 @@ const useUserPrivacySettings = (
     try {
       await updateUserPassword(values);
       resetForm();
-      handleSuccessResponse('Password changed successfully!');
+      queueSnackbar({
+        text: 'Password changed successfully!',
+        severity: 'success',
+      });
     } catch (err: any) {
-      handleErrorResponse(err.response.data.error);
+      queueSnackbar({
+        text: err.response.data.error,
+        severity: 'success',
+      });
     }
   };
 
@@ -60,7 +58,10 @@ const useUserPrivacySettings = (
       await logoutAllSessions();
       navigate(PATHS.HOME);
     } catch (err: any) {
-      handleErrorResponse('Error logging out of all sessions!');
+      queueSnackbar({
+        text: 'Error logging out of all sessions!',
+        severity: 'success',
+      });
     }
   };
 
@@ -70,7 +71,10 @@ const useUserPrivacySettings = (
       deleteAccount();
       navigate(PATHS.HOME);
     } catch (err: any) {
-      handleErrorResponse('Error deleting account!');
+      queueSnackbar({
+        text: 'Error deleting account!',
+        severity: 'success',
+      });
     }
   };
 

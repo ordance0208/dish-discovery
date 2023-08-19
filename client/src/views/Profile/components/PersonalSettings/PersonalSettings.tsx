@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { NEUTRAL } from '../../../../theme';
 import { makeStyles } from '@mui/styles';
 import { CircularProgress, Grid, Theme } from '@mui/material';
-import { NEUTRAL } from '../../../../theme';
 import useUserPersonalSettings from '../../../../hooks/settings/useUserPersonalSettings';
 import { PersonalInfoPayload } from '../../../../models/user/userSettingsPayloads';
-import { IResponse } from '../../../../models/response';
 import { AvatarActions } from '../../../../models/settings';
 import { Option } from '../../../../components/Dropdown/Dropdown';
 import TextField from '../../../../components/TextField';
@@ -13,7 +12,6 @@ import Button from '../../../../components/Button';
 import Typography from '../../../../components/Typography';
 import Dropdown from '../../../../components/Dropdown';
 import Dialog from '../../../../components/Dialog';
-import Alert from '../../../../components/Alert';
 import defaultAvatar from '../../../../assets/img/default-avatar.png';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -100,15 +98,6 @@ const PersonalSettings = () => {
 
   const [avatar, setAvatar] = useState<string>(defaultAvatar);
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
-  const [response, setResponse] = useState<IResponse | undefined>();
-
-  useEffect(() => {
-    if (!response) return;
-
-    setTimeout(() => {
-      setResponse(undefined);
-    }, 5000);
-  }, [response]);
 
   const {
     user,
@@ -119,7 +108,7 @@ const PersonalSettings = () => {
     onProfileUpdate,
     handleAvatarUpload,
     handleRemoveAvatar,
-  } = useUserPersonalSettings(setResponse);
+  } = useUserPersonalSettings();
 
   useEffect(() => {
     setAvatar(avatarUrl || defaultAvatar);
@@ -246,11 +235,6 @@ const PersonalSettings = () => {
               );
             }}
           </Formik>
-          {response && (
-            <Alert className={classes.alert} severity={response.severity}>
-              {response.text}
-            </Alert>
-          )}
         </div>
       ) : (
         <Grid className={classes.circularProgressWrapper}>

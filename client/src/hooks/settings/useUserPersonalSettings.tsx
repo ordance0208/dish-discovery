@@ -1,17 +1,17 @@
 import * as Yup from 'yup';
+import useSnackbar from '../useSnackbar';
 import { useAuthActions } from '../../utils/AuthContext/actions';
 import { useAuthData } from '../../utils/AuthContext/selectors';
 import { avatarOptions } from '../../utils/settings.helpers';
 import { PersonalInfoPayload } from '../../models/user/userSettingsPayloads';
-import { IResponse } from '../../models/response';
 
-const useUserPersonalSettings = (
-  setResponse: React.Dispatch<React.SetStateAction<IResponse | undefined>>
-) => {
+const useUserPersonalSettings = () => {
   const { user } = useAuthData();
 
   const { updateUserInfo, uploadUserAvatar, removeUserAvatar } =
     useAuthActions();
+
+  const queueSnackbar = useSnackbar();
 
   const avatarUrl = user?.avatar;
 
@@ -29,20 +29,15 @@ const useUserPersonalSettings = (
       .required('Please enter an email address'),
   });
 
-  const handleErrorResponse = (text: string) => {
-    setResponse({ severity: 'warning', text });
-  };
-
-  const handleSuccessResponse = (text: string) => {
-    setResponse({ severity: 'success', text });
-  };
-
   const onProfileUpdate = async (values: PersonalInfoPayload) => {
     try {
       await updateUserInfo(values);
-      handleSuccessResponse('Profile info updated successfully!');
+      queueSnackbar({
+        text: 'Profile info updated successfully',
+        severity: 'success',
+      });
     } catch (err: any) {
-      handleErrorResponse(err.message);
+      queueSnackbar({ text: err.message, severity: 'success' });
     }
   };
 
@@ -51,18 +46,30 @@ const useUserPersonalSettings = (
     formData.append('avatar', file);
     try {
       await uploadUserAvatar(formData);
-      handleSuccessResponse('Avatar uploaded successfully!');
+      queueSnackbar({
+        text: 'Avatar uploaded successfully!',
+        severity: 'success',
+      });
     } catch (err: any) {
-      handleErrorResponse(err.message);
+      queueSnackbar({
+        text: err.message,
+        severity: 'success',
+      });
     }
   };
 
   const handleRemoveAvatar = async () => {
     try {
       await removeUserAvatar();
-      handleSuccessResponse('Avatar removed successfully!');
+      queueSnackbar({
+        text: 'Avatar removed successfully!',
+        severity: 'success',
+      });
     } catch (err: any) {
-      handleErrorResponse(err.message);
+      queueSnackbar({
+        text: err.message,
+        severity: 'success',
+      });
     }
   };
 
