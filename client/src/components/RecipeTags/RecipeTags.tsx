@@ -34,6 +34,20 @@ const useStyles = makeStyles((theme: Theme) => ({
       border: 'none',
     },
   },
+  paddingFix: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    paddingRight: 14,
+    height: 48,
+    overflowY: 'hidden',
+    overflowX: 'scroll',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
   input: {
     outline: 'none',
     border: 'none',
@@ -101,24 +115,26 @@ const RecipeTags = ({ name }: Props) => {
         })}
         onClick={() => inputRef?.current?.focus()}
       >
-        {tags.map((tag: string) => (
-          <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-        ))}
-        <input
-          ref={inputRef}
-          className={classes.input}
-          value={inputValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.value === ',') return;
-            setInputValue(e.target.value);
-          }}
-          placeholder={
-            isEmpty(tags)
-              ? 'Enter at least one tag (separate the tags with a comma)'
-              : undefined
-          }
-          onKeyDown={handleAddTag}
-        />
+        <div className={classes.paddingFix}>
+          {tags.map((tag: string) => (
+            <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
+          ))}
+          <input
+            ref={inputRef}
+            className={classes.input}
+            value={inputValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.value === ',') return;
+              setInputValue(e.target.value);
+            }}
+            placeholder={
+              isEmpty(tags)
+                ? 'Enter at least one tag (separate the tags with a comma)'
+                : undefined
+            }
+            onKeyDown={handleAddTag}
+          />
+        </div>
       </div>
       {!!meta.error && meta.touched && (
         <FormHelperText className={classes.helperText}>
