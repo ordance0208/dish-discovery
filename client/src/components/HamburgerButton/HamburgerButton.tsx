@@ -69,10 +69,15 @@ const HamburgerButton = ({ menuOpened, setMenuOpened }: Props) => {
 
   return (
     <div
+      id='hamburger-button'
       className={classes.hamburgerButton}
       onClick={() => setMenuOpened((prev: boolean) => !prev)}
     >
-      <div className={classes.hamburgerLayers} data-active={menuOpened}></div>
+      <div
+        id='hamburger-button'
+        className={classes.hamburgerLayers}
+        data-active={menuOpened}
+      ></div>
     </div>
   );
 };
