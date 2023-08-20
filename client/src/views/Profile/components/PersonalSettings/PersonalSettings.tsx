@@ -4,6 +4,7 @@ import { NEUTRAL } from '../../../../theme';
 import { makeStyles } from '@mui/styles';
 import { CircularProgress, Grid, Theme } from '@mui/material';
 import useUserPersonalSettings from '../../../../hooks/settings/useUserPersonalSettings';
+import useDocumentTitle from '../../../../hooks/useDocumentTitle';
 import { PersonalInfoPayload } from '../../../../models/user/userSettingsPayloads';
 import { AvatarActions } from '../../../../models/settings';
 import { Option } from '../../../../components/Dropdown/Dropdown';
@@ -105,6 +106,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const PersonalSettings = () => {
   const classes = useStyles();
+
+  useDocumentTitle('Personal Settings');
 
   const [anchor, setAnchor] = useState<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

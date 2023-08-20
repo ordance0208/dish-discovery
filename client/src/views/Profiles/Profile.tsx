@@ -4,6 +4,7 @@ import { Divider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
 import useProfile from '../../hooks/profile/useProfile';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { PATHS } from '../../routes';
 import AsideCard from '../../components/AsideCard';
 import Button from '../../components/Button';
@@ -101,6 +102,8 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const { profile, loading } = useProfile();
+
+  useDocumentTitle(`${profile?.firstName} ${profile?.lastName}`);
 
   return (
     <div className={classes.root}>

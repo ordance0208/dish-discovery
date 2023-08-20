@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TEXT_DARK } from '../../../../theme';
 import useUserPrivacySettings from '../../../../hooks/settings/useUserPrivacySettings';
+import useDocumentTitle from '../../../../hooks/useDocumentTitle';
 import { PasswordPayload } from '../../../../models/user/userSettingsPayloads';
-import { IResponse } from '../../../../models/response';
 import Typography from '../../../../components/Typography';
 import PasswordField from '../../../../components/PasswordField';
 import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
-import Alert from '../../../../components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => ({
   privacySettingsContent: {
@@ -52,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const PrivacySettings = () => {
   const classes = useStyles();
+
+  useDocumentTitle('Privacy Settings');
+
   const [action, setAction] = useState<'logout' | 'delete' | null>(null);
 
   const {

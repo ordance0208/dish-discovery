@@ -5,6 +5,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecipeData } from '../../utils/RecipeContext/selectors';
 import { useRecipeActions } from '../../utils/RecipeContext/actions';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import AsideCard from '../../components/AsideCard';
 import RecipesSkeleton from './RecipesSkeleton';
 import RecipeFilters from './RecipeFilters';
@@ -35,6 +36,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Recipes = () => {
   const classes = useStyles();
+
+  useDocumentTitle('Recipes');
 
   const location = useLocation();
   const parsedQuery = queryString.parse(location.search);

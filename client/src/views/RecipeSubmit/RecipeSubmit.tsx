@@ -12,6 +12,7 @@ import { Theme, useTheme } from '@mui/material';
 import { TEXT_DARK } from '../../theme';
 import { makeStyles } from '@mui/styles';
 import useSubmitRecipe from '../../hooks/recipe/useSubmitRecipe';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { isEditorEmpty } from '../../utils/editor.helpers';
 import { RecipeFields } from '../../models/recipe/recipePayload';
 import { PATHS } from '../../routes';
@@ -99,9 +100,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 const RecipeSubmit = () => {
   const theme = useTheme();
   const classes = useStyles();
-  
+
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useDocumentTitle(id ? 'Edit recipe' : 'Submit a recipe');
 
   const [file, setFile] = useState<File | null>(null);
   const [recipeSubmitted, setRecipeSubmitted] = useState<string | null>(null);
