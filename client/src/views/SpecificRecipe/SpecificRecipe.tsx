@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { TEXT_DARK } from '../../theme';
 import { makeStyles } from '@mui/styles';
 import { useRecipeData } from '../../utils/RecipeContext/selectors';
@@ -100,6 +100,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 32,
     width: 32,
     borderRadius: '50%',
+  },
+  authorProfileLink: {
+    textDecoration: 'none',
   },
   recipeDescriptionWrapper: {
     marginTop: 24,
@@ -235,7 +238,16 @@ const SpecificRecipe = () => {
                   src={singleRecipe?.user.avatar || defaultAvatar}
                   alt='user'
                 />
-                <Typography>{`${singleRecipe?.user.firstName} ${singleRecipe?.user.lastName}`}</Typography>
+                <Link
+                  className={classes.authorProfileLink}
+                  to={
+                    user?._id === singleRecipe?.user?._id
+                      ? PATHS.PROFILE_ME
+                      : `${PATHS.PROFILE}/${singleRecipe?.user._id}`
+                  }
+                >
+                  <Typography>{`${singleRecipe?.user.firstName} ${singleRecipe?.user.lastName}`}</Typography>
+                </Link>
               </div>
               <Divider flexItem orientation='vertical' />
               <UilCalender color={TEXT_DARK} />
