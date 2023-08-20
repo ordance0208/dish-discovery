@@ -62,6 +62,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   emailField: {
     gridColumn: '1 / span 2',
   },
+  bioField: {
+    width: '100%',
+    height: 200,
+    resize: 'none',
+    gridColumn: '1 / span 2',
+    fontFamily: 'sans-serif',
+    padding: 12,
+    fontSize: 16,
+    borderRadius: 4,
+    outline: 'none',
+    background: 'transparent',
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    '&:focus': {
+      border: `2px solid ${theme.palette.primary.main}`,
+    },
+  },
   option: {
     padding: '4px 8px',
     textAlign: 'center',
@@ -77,9 +93,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   avatarUpload: {
     display: 'none',
-  },
-  alert: {
-    marginTop: 20,
   },
   circularProgressWrapper: {
     width: '100%',
@@ -208,8 +221,9 @@ const PersonalSettings = () => {
           >
             {({
               handleSubmit,
+              handleChange,
               dirty,
-              values: { firstName, lastName, email },
+              values: { firstName, lastName, email, bio },
             }: FormikProps<PersonalInfoPayload>) => {
               return (
                 <form onSubmit={handleSubmit}>
@@ -222,6 +236,15 @@ const PersonalSettings = () => {
                       className={classes.emailField}
                       type='email'
                     />
+                    <textarea
+                      name='bio'
+                      value={bio}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        handleChange(e);
+                      }}
+                      maxLength={320}
+                      className={classes.bioField}
+                    ></textarea>
                     <Button
                       disabled={!dirty || !firstName || !lastName || !email}
                       onClick={handleSubmit}

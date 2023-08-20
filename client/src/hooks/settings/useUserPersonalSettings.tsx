@@ -19,6 +19,7 @@ const useUserPersonalSettings = () => {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
+    bio: user?.bio || '',
   };
 
   const validationSchema = Yup.object().shape({
@@ -27,6 +28,7 @@ const useUserPersonalSettings = () => {
     email: Yup.string()
       .email('Please enter a valid email address')
       .required('Please enter an email address'),
+    bio: Yup.string().max(320).notRequired(),
   });
 
   const onProfileUpdate = async (values: PersonalInfoPayload) => {
