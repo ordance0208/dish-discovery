@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRouter from './routers/authRouter';
 import userRouter from './routers/userRouter';
 import recipeRouter from './routers/recipeRouter';
+import profileRouter from './routers/profileRouter';
 const SERVER_PORT = process.env.SERVER_PORT || 8000;
 import connectToDatabase from './db/mongoose';
 
@@ -21,6 +22,7 @@ app.use('/recipes', express.static('recipes'));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/recipes', recipeRouter);
+app.use('/api/profiles', profileRouter);
 
 app.listen(SERVER_PORT, () => {
   console.log('Server is running on port: ' + SERVER_PORT);

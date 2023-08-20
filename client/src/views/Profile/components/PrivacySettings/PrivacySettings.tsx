@@ -12,7 +12,7 @@ import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
 import Alert from '../../../../components/Alert';
 
-const useStyles =  makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   privacySettingsContent: {
     width: 500,
     [theme.breakpoints.down('md')]: {
@@ -46,23 +46,13 @@ const useStyles =  makeStyles((theme: Theme) => ({
     alignSelf: 'flex-start',
   },
   alert: {
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 }));
 
 const PrivacySettings = () => {
   const classes = useStyles();
   const [action, setAction] = useState<'logout' | 'delete' | null>(null);
-
-  const [response, setResponse] = useState<IResponse | undefined>();
-
-  useEffect(() => {
-    if (!response) return;
-
-    setTimeout(() => {
-      setResponse(undefined);
-    }, 5000);
-  }, [response]);
 
   const {
     initialValues,
@@ -70,8 +60,7 @@ const PrivacySettings = () => {
     handlePasswordChange,
     handleLogoutAllSessions,
     handleDeleteAccount,
-  } = useUserPrivacySettings(setResponse);
-
+  } = useUserPrivacySettings();
 
   return (
     <div className={classes.privacySettingsContent}>
@@ -145,30 +134,27 @@ const PrivacySettings = () => {
           Delete account
         </Button>
       </div>
-      {response && (
-            <Alert className={classes.alert} severity={response.severity}>
-              {response.text}
-            </Alert>
-          )}
-      <Dialog
-        open={!!action}
-        onClose={() => setAction(null)}
-        onConfirm={
-          action === 'delete' ? handleDeleteAccount : handleLogoutAllSessions
-        }
-        title={
-          action === 'delete'
-            ? 'Delete Your account'
-            : 'Log out of all sessions'
-        }
-        confirmButtonColor='warning'
-      >
-        <Typography className={classes.dialogText}>
-          {action === 'delete'
-            ? 'Are you sure you want to delete your account?'
-            : 'Are you sure you want to log out of all sessions?'}
-        </Typography>
-      </Dialog>
+      {!!action && (
+        <Dialog
+          open={true}
+          onClose={() => setAction(null)}
+          onConfirm={
+            action === 'delete' ? handleDeleteAccount : handleLogoutAllSessions
+          }
+          title={
+            action === 'delete'
+              ? 'Delete Your account'
+              : 'Log out of all sessions'
+          }
+          confirmButtonColor='warning'
+        >
+          <Typography className={classes.dialogText}>
+            {action === 'delete'
+              ? 'Are you sure you want to delete your account?'
+              : 'Are you sure you want to log out of all sessions?'}
+          </Typography>
+        </Dialog>
+      )}
     </div>
   );
 };

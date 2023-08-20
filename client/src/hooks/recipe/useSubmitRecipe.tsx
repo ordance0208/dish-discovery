@@ -58,8 +58,13 @@ const useSubmitRecipe = (
         };
         setFormValues(recipeData);
       } catch (err: any) {
-        queueSnackbar({ text: err.response.data.error, severity: 'error' });
-        navigate(PATHS.RECIPES, { replace: true });
+        if (err.response.status === 403) {
+          navigate(PATHS.RECIPES, { replace: true });
+          queueSnackbar({ text: err.response.data.error, severity: 'error' });
+        }
+        if (err.response.status === 404) {
+          navigate(PATHS.NOT_FOUND, { replace: true });
+        }
       }
     };
 
