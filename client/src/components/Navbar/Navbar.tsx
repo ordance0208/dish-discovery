@@ -117,14 +117,14 @@ const Navbar = () => {
                 );
               }
             )}
-            {user && <ProfileDropdown />}
+            {localStorage.getItem('token') && <ProfileDropdown />}
           </nav>
           <div className={classes.hamburgerButtonWrapper}>
             <HamburgerButton
               menuOpened={menuOpened}
               setMenuOpened={setmenuOpened}
             />
-            {user && <ProfileDropdown />}
+            {localStorage.getItem('token') && <ProfileDropdown />}
           </div>
         </div>
       </header>
