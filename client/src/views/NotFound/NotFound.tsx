@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     fontSize: 20,
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 18,
+      padding: 16
+    }
   },
 }));
 
