@@ -6,6 +6,7 @@ import { makeStyles } from '@mui/styles';
 import { useRecipeData } from '../../utils/RecipeContext/selectors';
 import { useRecipeActions } from '../../utils/RecipeContext/actions';
 import { useAuthData } from '../../utils/AuthContext/selectors';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { PATHS } from '../../routes';
 import {
   UilCalender,
@@ -54,6 +55,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   recipeTitle: {
     fontSize: 32,
     color: TEXT_DARK,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 24,
+    },
   },
   recipeActions: {
     display: 'flex',
@@ -172,6 +176,8 @@ const SpecificRecipe = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const { fetchSingleRecipe, resetRecipe, recipeDelete } = useRecipeActions();
   const { singleRecipe, latestRecipes } = useRecipeData();
+
+  useDocumentTitle(singleRecipe?.title || 'Loading...');
 
   const { pathname } = useLocation();
   const recipeId = pathname.split('/').pop();
