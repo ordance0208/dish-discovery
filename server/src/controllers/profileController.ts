@@ -14,6 +14,9 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
     res.send({ user, userRecipes });
   } catch (err: any) {
+    if (err.name === 'CastError') {
+      return res.status(404).send();
+    }
     return res.status(500).send(err);
   }
 };

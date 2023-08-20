@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useSnackbar from '../useSnackbar';
 import { useAuthData } from '../../utils/AuthContext/selectors';
 import { IRecipe } from '../../models/recipe';
@@ -9,6 +9,7 @@ import { PATHS } from '../../routes';
 const useProfile = () => {
   const { user } = useAuthData();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const id =
     pathname === `${PATHS.PROFILE_ME}` ? user._id : pathname.split('/').pop();
@@ -36,6 +37,10 @@ const useProfile = () => {
 
         setProfile(profileData);
       } catch (err: any) {
+        if (err.response.status === 404) {
+          return navigate(PATHS.NOT_FOUND, { replace: true });
+        }
+
         queueSnackbar({ text: err.response.data.error, severity: 'error' });
       } finally {
         setLoading(false);

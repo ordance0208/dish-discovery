@@ -12,6 +12,7 @@ import RecipeSubmit from './views/RecipeSubmit';
 import SpecificRecipe from './views/SpecificRecipe';
 import Recipes from './views/Recipes';
 import Profile from './views/Profiles/Profile';
+import NotFound from './views/NotFound';
 
 const Router = () => {
   const { getCurrentUser } = useAuthActions();
@@ -39,6 +40,9 @@ const Router = () => {
         <Route element={<SignIn />} path={AUTH_PATHS.LOGIN} />
       </Route>
       <Route element={<Profile />} path={`${PATHS.PROFILE}/:id`} />
+      {!localStorage.getItem('token') && (
+        <Route path='*' element={<NotFound />} />
+      )}
       {user ? (
         <>
           <Route element={<PrivateRoute />}>
@@ -59,6 +63,7 @@ const Router = () => {
               path={`${PATHS.EDIT_RECIPE}/:id`}
             />
           </Route>
+          <Route path='*' element={<NotFound />} />
         </>
       ) : null}
     </Routes>

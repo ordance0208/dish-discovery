@@ -11,6 +11,7 @@ const PATHS = {
   PROFILE_SETTINGS: '/profile-settings',
   PROFILE: '/profiles',
   PROFILE_ME: '/profile/me',
+  NOT_FOUND: '/not-found',
 };
 
 export { AUTH_PATHS, PATHS };
