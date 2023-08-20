@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { NEUTRAL } from '../../../../theme';
 import { makeStyles } from '@mui/styles';
 import { CircularProgress, Grid, Theme } from '@mui/material';
-import { NEUTRAL } from '../../../../theme';
 import useUserPersonalSettings from '../../../../hooks/settings/useUserPersonalSettings';
 import { PersonalInfoPayload } from '../../../../models/user/userSettingsPayloads';
-import { IResponse } from '../../../../models/response';
 import { AvatarActions } from '../../../../models/settings';
 import { Option } from '../../../../components/Dropdown/Dropdown';
 import TextField from '../../../../components/TextField';
@@ -13,7 +12,6 @@ import Button from '../../../../components/Button';
 import Typography from '../../../../components/Typography';
 import Dropdown from '../../../../components/Dropdown';
 import Dialog from '../../../../components/Dialog';
-import Alert from '../../../../components/Alert';
 import defaultAvatar from '../../../../assets/img/default-avatar.png';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -64,6 +62,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   emailField: {
     gridColumn: '1 / span 2',
   },
+  bioField: {
+    width: '100%',
+    height: 200,
+    resize: 'none',
+    gridColumn: '1 / span 2',
+    fontFamily: 'sans-serif',
+    padding: 12,
+    fontSize: 16,
+    borderRadius: 4,
+    outline: 'none',
+    background: 'transparent',
+    border: '1px solid rgba(0, 0, 0, 0.23)',
+    '&:focus': {
+      border: `2px solid ${theme.palette.primary.main}`,
+    },
+  },
   option: {
     padding: '4px 8px',
     textAlign: 'center',
@@ -79,9 +93,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   avatarUpload: {
     display: 'none',
-  },
-  alert: {
-    marginTop: 20,
   },
   circularProgressWrapper: {
     width: '100%',
@@ -100,15 +111,6 @@ const PersonalSettings = () => {
 
   const [avatar, setAvatar] = useState<string>(defaultAvatar);
   const [dialogOpened, setDialogOpened] = useState<boolean>(false);
-  const [response, setResponse] = useState<IResponse | undefined>();
-
-  useEffect(() => {
-    if (!response) return;
-
-    setTimeout(() => {
-      setResponse(undefined);
-    }, 5000);
-  }, [response]);
 
   const {
     user,
@@ -119,7 +121,7 @@ const PersonalSettings = () => {
     onProfileUpdate,
     handleAvatarUpload,
     handleRemoveAvatar,
-  } = useUserPersonalSettings(setResponse);
+  } = useUserPersonalSettings();
 
   useEffect(() => {
     setAvatar(avatarUrl || defaultAvatar);
@@ -219,8 +221,9 @@ const PersonalSettings = () => {
           >
             {({
               handleSubmit,
+              handleChange,
               dirty,
-              values: { firstName, lastName, email },
+              values: { firstName, lastName, email, bio },
             }: FormikProps<PersonalInfoPayload>) => {
               return (
                 <form onSubmit={handleSubmit}>
@@ -233,6 +236,15 @@ const PersonalSettings = () => {
                       className={classes.emailField}
                       type='email'
                     />
+                    <textarea
+                      name='bio'
+                      value={bio}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        handleChange(e);
+                      }}
+                      maxLength={320}
+                      className={classes.bioField}
+                    ></textarea>
                     <Button
                       disabled={!dirty || !firstName || !lastName || !email}
                       onClick={handleSubmit}
@@ -246,11 +258,6 @@ const PersonalSettings = () => {
               );
             }}
           </Formik>
-          {response && (
-            <Alert className={classes.alert} severity={response.severity}>
-              {response.text}
-            </Alert>
-          )}
         </div>
       ) : (
         <Grid className={classes.circularProgressWrapper}>

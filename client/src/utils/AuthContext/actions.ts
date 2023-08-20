@@ -55,7 +55,10 @@ export const useAuthActions = () => {
       const data = await currentUser();
       const payload = data;
       dispatch({ type: types.GET_CURRENT_USER_SUCCESS, payload });
-    } catch (err) {
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        return dispatch({ type: types.GET_CURRENT_USER_AUTHORIZATION_FAILED });
+      }
       dispatch({ type: types.GET_CURRENT_USER_FAIL });
     }
   }, [dispatch]);

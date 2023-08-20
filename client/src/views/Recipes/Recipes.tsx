@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       gridTemplateColumns: 'repeat(3, minmax(350px, 1fr))',
     },
   },
+  marginFix: {
+    marginTop: 24,
+  },
 }));
 
 const Recipes = () => {
@@ -59,17 +62,18 @@ const Recipes = () => {
 
   return (
     <div className={classes.root}>
+      <RecipeFilters />
       {loading || !recipes ? (
-        <RecipesSkeleton />
-      ) : (
         <>
-          <RecipeFilters />
-          <div className={classes.cardGrid}>
-            {recipes.map((recipe: any) => {
-              return <AsideCard key={recipe.id} recipe={recipe} />;
-            })}
-          </div>
+          <div className={classes.marginFix}></div>
+          <RecipesSkeleton />
         </>
+      ) : (
+        <div className={classes.cardGrid}>
+          {recipes.map((recipe: any) => {
+            return <AsideCard key={recipe.id} recipe={recipe} />;
+          })}
+        </div>
       )}
     </div>
   );

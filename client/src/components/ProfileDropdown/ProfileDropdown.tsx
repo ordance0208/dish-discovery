@@ -48,7 +48,7 @@ const ProfileDropdown = () => {
   const onOptionClick = async (option: Option) => {
     switch (option.value) {
       case DropdownOptions.PROFILE: {
-        navigate(PATHS.PROFILE);
+        navigate(PATHS.PROFILE_ME);
         break;
       }
       case DropdownOptions.PROFILE_SETTINGS: {

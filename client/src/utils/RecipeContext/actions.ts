@@ -38,6 +38,9 @@ export const useRecipeActions = () => {
           payload: data,
         });
       } catch (err: any) {
+        if (err.response.status === 404) {
+          navigate(PATHS.NOT_FOUND, { replace: true });
+        }
         dispatch({ type: types.FETCH_SINGLE_RECIPE_FAIL });
       }
     },
