@@ -56,7 +56,7 @@ const useUserPrivacySettings = () => {
   const handleLogoutAllSessions = async () => {
     try {
       await logoutAllSessions();
-      navigate(PATHS.HOME);
+      navigate(PATHS.RECIPES);
     } catch (err: any) {
       queueSnackbar({
         text: 'Error logging out of all sessions!',
@@ -69,7 +69,7 @@ const useUserPrivacySettings = () => {
     try {
       await deleteUserAccount();
       deleteAccount();
-      navigate(PATHS.HOME);
+      navigate(PATHS.RECIPES);
     } catch (err: any) {
       queueSnackbar({
         text: 'Error deleting account!',
