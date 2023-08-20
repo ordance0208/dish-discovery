@@ -4,14 +4,13 @@ const AUTH_PATHS = {
 };
 
 const PATHS = {
-  HOME: '/home',
   RECIPES: '/recipes',
+  SPECIFIC_RECIPE: '/recipe',
   RECIPE_SUBMIT: '/recipe-submit',
   EDIT_RECIPE: '/edit-recipe',
-  ABOUT: '/about',
-  PROFILE: '/profile',
   PROFILE_SETTINGS: '/profile-settings',
-  SPECIFIC_RECIPE: '/recipe',
+  PROFILE: '/profiles',
+  PROFILE_ME: '/profile/me',
 };
 
 export { AUTH_PATHS, PATHS };
