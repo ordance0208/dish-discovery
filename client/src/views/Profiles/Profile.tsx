@@ -84,6 +84,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   textareaNoButton: {
     height: 'calc(100% - 72px)',
+    [theme.breakpoints.down('md')]: {
+      height: 200,
+    },
   },
   cardsGrid: {
     display: 'grid',
@@ -131,10 +134,11 @@ const Profile = () => {
             </div>
             <textarea
               placeholder='No bio provided'
+              value={profile.bio}
               className={clsx(classes.textarea, {
                 [classes.textareaNoButton]: !profile.isSelf,
               })}
-              maxLength={300}
+              maxLength={320}
               spellCheck={false}
               disabled
             ></textarea>
