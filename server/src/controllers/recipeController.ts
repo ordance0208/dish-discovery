@@ -2,8 +2,7 @@ import { Response } from 'express';
 import multer from 'multer';
 import Recipe from '../models/Recipe';
 import { AuthRequest } from '../middleware/auth';
-import { recipePayloadSchema } from '../validation/recipe';
-import { isEditorEmpty } from '../validation/recipeDescription';
+import { recipePayloadSchema, isEditorEmpty } from '../validation/recipe';
 
 export const recipe = multer({
   dest: 'recipes',
@@ -28,7 +27,7 @@ export const storage = multer.diskStorage({
 });
 
 export const createRecipe = async (req: AuthRequest, res: Response) => {
-  if (!req.file) {
+  if (!req.file || (req as any).fileValidationError) {
     return res.status(400).send({ error: 'Invalid data' });
   }
 
@@ -47,10 +46,11 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
     await recipe.save();
     res.status(201).send(recipe);
   } catch (err: any) {
-    return res.status(400).send(err);
+    if (err.details) {
+      return res.status(400).send({ error: 'Invalid data' });
+    }
+    return res.status(500).send({ error: err.message });
   }
-
-  res.status(200).send();
 };
 
 export const getRecipes = async (req: AuthRequest, res: Response) => {
@@ -93,7 +93,7 @@ export const getRecipes = async (req: AuthRequest, res: Response) => {
 
     res.send(recipes);
   } catch (err: any) {
-    return res.status(500).send(err);
+    return res.status(500).send({ error: err.message });
   }
 };
 
@@ -126,9 +126,9 @@ export const getRecipe = async (req: AuthRequest, res: Response) => {
     res.send({ recipe, latestRecipes });
   } catch (err: any) {
     if (err.name === 'CastError') {
-      return res.status(404).send();
+      return res.status(404).send({ error: 'Recipe not found' });
     }
-    return res.status(500).send(err);
+    return res.status(500).send({ error: err.message });
   }
 };
 
@@ -150,7 +150,7 @@ export const getRecipeForEdit = async (req: AuthRequest, res: Response) => {
     if (err.name === 'CastError') {
       return res.status(404).send({ error: 'Recipe not found' });
     }
-    return res.status(500).send(err);
+    return res.status(500).send({ error: err.message });
   }
 };
 
@@ -167,7 +167,10 @@ export const editRecipe = async (req: AuthRequest, res: Response) => {
     );
     res.send(recipe);
   } catch (err: any) {
-    return res.status(500).send(err);
+    if (err.details) {
+      return res.status(400).send({ error: 'Invalid data' });
+    }
+    return res.status(500).send({ error: err.message });
   }
 };
 
@@ -195,20 +198,28 @@ export const likeRecipe = async (req: AuthRequest, res: Response) => {
     await recipe.save();
     res.send(recipe);
   } catch (err: any) {
-    console.log(err);
-    return res.status(500).send(err);
+    if (err.name === 'CastError') {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
+    return res.status(500).send({ error: err.message });
   }
 };
 
 export const deleteRecipe = async (req: AuthRequest, res: Response) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
     if (req.user._id.toString() !== recipe?.user.toString()) {
       return res.status(403).send({ error: 'Authorization failed' });
     }
     await recipe?.deleteOne();
     res.send(recipe);
   } catch (err: any) {
-    return res.status(500).send(err);
+    if (err.name === 'CastError') {
+      return res.status(404).send({ error: 'Recipe not found' });
+    }
+    return res.status(500).send({ error: err.message });
   }
 };
