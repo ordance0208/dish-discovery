@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   name: {
     flex: 1,
   },
-  haveAccount: {
+  userRegisteredText: {
     fontSize: 14,
     fontWeight: 600,
     textAlign: 'center',
     color: '#333',
   },
-  signinLink: {
+  signInLink: {
     textDecoration: 'none',
     fontSize: 14,
     fontWeight: 600,
@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 const SignUp = () => {
   const classes = useStyles();
 
-  
   const [response, setResponse] = useState<IResponse | undefined>();
 
   useEffect(() => {
@@ -57,8 +56,9 @@ const SignUp = () => {
       setResponse(undefined);
     }, 5000);
   }, [response]);
-  
-  const { initialValues, validationSchema, handleSignup } = useSignupForm(setResponse);
+
+  const { initialValues, validationSchema, handleSignup } =
+    useSignupForm(setResponse);
 
   return (
     <AuthView
@@ -99,9 +99,9 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            <Typography className={classes.haveAccount}>
+            <Typography className={classes.userRegisteredText}>
               Already have an account?{' '}
-              <Link to='/login' className={classes.signinLink}>
+              <Link to='/login' className={classes.signInLink}>
                 Log in
               </Link>
             </Typography>
