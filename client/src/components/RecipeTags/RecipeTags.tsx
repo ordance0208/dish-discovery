@@ -14,18 +14,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   recipeTagsWrapper: {
     border: '1px solid rgb(188, 188, 188)',
     borderRadius: 4,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    padding: '8px 14px',
+    padding: 8,
     height: 48,
-    overflowY: 'hidden',
-    overflowX: 'scroll',
-    msOverflowStyle: 'none',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': {
-      display: 'none',
-    },
     '&:hover': {
       border: '1px solid rgb(118, 118, 118)',
     },
@@ -39,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     gap: 12,
     paddingRight: 14,
-    height: 48,
+    height: '100%',
     overflowY: 'hidden',
     overflowX: 'scroll',
     msOverflowStyle: 'none',
@@ -78,6 +68,7 @@ const RecipeTags = ({ name }: Props) => {
 
   useEffect(() => {
     setFieldValue(name!, tags);
+    // eslint-disable-next-line
   }, [tags]);
 
   useEffect(() => {
@@ -108,7 +99,7 @@ const RecipeTags = ({ name }: Props) => {
   };
 
   return (
-    <div>
+    <>
       <div
         className={clsx(classes.recipeTagsWrapper, {
           [classes.error]: !!meta.error && meta.touched,
@@ -141,7 +132,7 @@ const RecipeTags = ({ name }: Props) => {
           {meta.error}
         </FormHelperText>
       )}
-    </div>
+    </>
   );
 };
 

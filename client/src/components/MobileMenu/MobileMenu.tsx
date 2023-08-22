@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
 import { ClickAwayListener, Collapse, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 type Path = {
   label: string;

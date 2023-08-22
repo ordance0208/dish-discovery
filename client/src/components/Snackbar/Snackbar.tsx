@@ -7,6 +7,12 @@ import Alert from '../Alert';
 import Typography from '../Typography';
 import IconButton from '../IconButton';
 
+interface Props {
+  severity: 'error' | 'info' | 'success' | 'warning' | undefined;
+  message: string;
+  onClose: () => void;
+}
+
 const useStyles = makeStyles({
   snackbarAlert: {
     padding: '28px 16px',
@@ -20,15 +26,18 @@ const useStyles = makeStyles({
 });
 
 const Snackbar = forwardRef(
-  (props: any, ref: React.ForwardedRef<HTMLDivElement>) => {
+  (
+    { severity, message, onClose }: Props,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) => {
     const classes = useStyles();
 
     return (
       <SnackbarContent ref={ref}>
-        <Alert severity={props.severity} className={classes.snackbarAlert}>
+        <Alert severity={severity} className={classes.snackbarAlert}>
           <div className={classes.snackbarContent}>
-            <Typography>{props.message}</Typography>
-            <IconButton onClick={props.onClose}>
+            <Typography>{message}</Typography>
+            <IconButton onClick={onClose}>
               <UilTimes color={WHITE} />
             </IconButton>
           </div>

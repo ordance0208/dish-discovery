@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import { WHITE } from '../../theme';
+import { makeStyles } from '@mui/styles';
 import { useAuthData } from '../../utils/AuthContext/selectors';
 import { menuPaths } from '../../utils/navbar.helpers';
 import { Path } from '../../models/path';
+import { PATHS } from '../../routes';
 import HamburgerButton from '../HamburgerButton';
 import MobileMenu from '../MobileMenu';
 import ProfileDropdown from '../ProfileDropdown';
 import logo from '../../assets/img/dish-discovery-logo-web.png';
-import { PATHS } from '../../routes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -87,7 +87,7 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
-  const { user } = useAuthData();
+  const hasToken = localStorage.getItem('token');
 
   return (
     <>
@@ -100,8 +100,8 @@ const Navbar = () => {
             {menuPaths.map(
               ({ to, label, availableWhenLoggedIn, protectedRoute }: Path) => {
                 if (
-                  (!availableWhenLoggedIn && localStorage.getItem('token')) ||
-                  (protectedRoute && !localStorage.getItem('token'))
+                  (!availableWhenLoggedIn && hasToken) ||
+                  (protectedRoute && !hasToken)
                 )
                   return null;
                 return (
@@ -117,14 +117,14 @@ const Navbar = () => {
                 );
               }
             )}
-            {localStorage.getItem('token') && <ProfileDropdown />}
+            {hasToken && <ProfileDropdown />}
           </nav>
           <div className={classes.hamburgerButtonWrapper}>
             <HamburgerButton
               menuOpened={menuOpened}
               setMenuOpened={setmenuOpened}
             />
-            {localStorage.getItem('token') && <ProfileDropdown />}
+            {hasToken && <ProfileDropdown />}
           </div>
         </div>
       </header>
