@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   section: {
     marginBottom: 50,
   },
-  red: {
+  warningText: {
     fontSize: 12,
     color: 'red',
     marginBottom: 12,
@@ -43,9 +43,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   changeButton: {
     alignSelf: 'flex-start',
-  },
-  alert: {
-    marginTop: 20,
   },
 }));
 
@@ -119,7 +116,7 @@ const PrivacySettings = () => {
         <Typography className={classes.subtitle}>
           Log out of all sessions
         </Typography>
-        <Typography className={classes.red}>
+        <Typography className={classes.warningText}>
           This action will log you out from your current session as well.
         </Typography>
         <Button color='warning' onClick={() => setAction('logout')}>
@@ -128,7 +125,7 @@ const PrivacySettings = () => {
       </div>
       <div className={classes.section}>
         <Typography className={classes.subtitle}>Delete account</Typography>
-        <Typography className={classes.red}>
+        <Typography className={classes.warningText}>
           This action will permamently delete your account and you will not be
           able to log in again.
         </Typography>

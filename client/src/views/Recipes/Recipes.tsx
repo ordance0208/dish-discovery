@@ -13,7 +13,8 @@ import RecipeFilters from './RecipeFilters';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     maxWidth: 1440,
-    marginTop: 64,
+    marginTop: 32,
+    marginBottom: 32,
     margin: 'auto',
     [theme.breakpoints.down('xl')]: {
       maxWidth: '90%',

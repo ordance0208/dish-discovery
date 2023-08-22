@@ -16,7 +16,8 @@ import defaultAvatar from '../../assets/img/default-avatar.png';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     maxWidth: 1440,
-    marginTop: 64,
+    marginTop: 32,
+    marginBottom: 32,
     margin: 'auto',
     [theme.breakpoints.down('xl')]: {
       width: '90%',
@@ -107,7 +108,7 @@ const Profile = () => {
 
   return (
     <div className={classes.root}>
-      {loading ? (
+      {loading || (!loading && !profile) ? (
         <ProfileSkeleton />
       ) : (
         <div className={classes.profileSection}>

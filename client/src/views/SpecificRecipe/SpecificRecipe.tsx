@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { isEmpty } from 'lodash';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { TEXT_DARK } from '../../theme';
 import { makeStyles } from '@mui/styles';
@@ -24,13 +25,15 @@ import ReadOnlyEditor from '../../components/ReadOnlyEditor';
 import defaultAvatar from '../../assets/img/default-avatar.png';
 import IconButton from '../../components/IconButton';
 import Dialog from '../../components/Dialog';
+import SpecificRecipeSkeleton from './SpecificRecipeSkeleton';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     maxWidth: 1440,
+    marginTop: 32,
+    marginBottom: 32,
     margin: 'auto',
     display: 'flex',
-    marginBottom: 32,
     [theme.breakpoints.down('xl')]: {
       maxWidth: '90%',
       width: '90%',
@@ -49,7 +52,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     gap: 32,
-    marginTop: 32,
     marginBottom: 16,
   },
   recipeTitle: {
@@ -95,12 +97,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderBottom: '1px solid lightgray',
     paddingBottom: 12,
   },
-  user: {
+  authorWrapper: {
     display: 'flex',
     gap: 8,
     alignItems: 'center',
   },
-  userAvatar: {
+  authorAvatar: {
     height: 32,
     width: 32,
     borderRadius: '50%',
@@ -108,7 +110,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   authorProfileLink: {
     textDecoration: 'none',
   },
-  recipeDescriptionWrapper: {
+  recipeInfoSection: {
     marginTop: 24,
     width: 850,
     [theme.breakpoints.down('xl')]: {
@@ -117,6 +119,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('lg')]: {
       width: '100%',
     },
+  },
+  recipeInfoSectionTitle: {
+    fontSize: 18,
+    fontWeight: 600,
+    marginBottom: 16,
+    color: TEXT_DARK,
   },
   ingredient: {
     display: 'flex',
@@ -127,12 +135,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 600,
-    marginBottom: 16,
-    color: TEXT_DARK,
   },
   tagsWrapper: {
     display: 'flex',
@@ -145,17 +147,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   aside: {
     flex: 1,
   },
-  asideSection: {
-    marginBottom: 16,
-  },
-  asideSectionTitle: {
-    marginTop: 32,
+  asideTitle: {
     fontSize: 18,
     fontWeight: 600,
     marginBottom: 32,
     color: TEXT_DARK,
   },
-  latestSection: {
+  latestPostsWrapper: {
     display: 'flex',
     flexDirection: 'column',
     gap: 24,
@@ -196,12 +194,12 @@ const SpecificRecipe = () => {
   }, [pathname]);
 
   return (
-    <div className={classes.root}>
+    <>
       {singleRecipe === null ? (
-        <Typography>Loading...</Typography>
+        <SpecificRecipeSkeleton />
       ) : (
-        <>
-          <div className={classes.recipeSection}>
+        <div className={classes.root}>
+          <article className={classes.recipeSection}>
             <div className={classes.recipeHeader}>
               <Typography className={classes.recipeTitle}>
                 {singleRecipe?.title}
@@ -238,9 +236,9 @@ const SpecificRecipe = () => {
               alt='recipe'
             />
             <div className={classes.recipeDetails}>
-              <div className={classes.user}>
+              <div className={classes.authorWrapper}>
                 <img
-                  className={classes.userAvatar}
+                  className={classes.authorAvatar}
                   src={singleRecipe?.user.avatar || defaultAvatar}
                   alt='user'
                 />
@@ -274,14 +272,14 @@ const SpecificRecipe = () => {
                 />
               )}
             </div>
-            <div className={classes.recipeDescriptionWrapper}>
-              <Typography className={classes.sectionTitle}>
+            <div className={classes.recipeInfoSection}>
+              <Typography className={classes.recipeInfoSectionTitle}>
                 Description
               </Typography>
               <ReadOnlyEditor editorValue={singleRecipe.description} />
             </div>
-            <div className={classes.recipeDescriptionWrapper}>
-              <Typography className={classes.sectionTitle}>
+            <div className={classes.recipeInfoSection}>
+              <Typography className={classes.recipeInfoSectionTitle}>
                 Ingredients
               </Typography>
               {singleRecipe?.ingredients.map(
@@ -301,30 +299,28 @@ const SpecificRecipe = () => {
                 )
               )}
             </div>
-            <div className={classes.recipeDescriptionWrapper}>
-              <Typography className={classes.sectionTitle}>Tags</Typography>
+            <div className={classes.recipeInfoSection}>
+              <Typography className={classes.recipeInfoSectionTitle}>
+                Tags
+              </Typography>
               <div className={classes.tagsWrapper}>
                 {singleRecipe?.tags.map((tag: string) => (
                   <Chip key={tag} label={tag} />
                 ))}
               </div>
             </div>
-          </div>
+          </article>
           <aside className={classes.aside}>
-            <div className={classes.asideSection}>
-              <Typography className={classes.asideSectionTitle}>
-                Latest Posts
-              </Typography>
-              <div className={classes.latestSection}>
-                {latestRecipes.map((post: any, index: number) => {
-                  return <AsideCard key={index} recipe={post} />;
-                })}
-              </div>
+            <Typography className={classes.asideTitle}>Latest Posts</Typography>
+            <div className={classes.latestPostsWrapper}>
+              {!isEmpty(latestRecipes) ? latestRecipes.map((post: any, index: number) => {
+                return <AsideCard key={index} recipe={post} />;
+              }) : <Typography>No recipes</Typography>}
             </div>
           </aside>
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
