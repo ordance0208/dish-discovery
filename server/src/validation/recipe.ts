@@ -18,3 +18,17 @@ export const recipePayloadSchema = Joi.object({
   preparationTime: Joi.number().integer().required(),
   tags: Joi.array().items(Joi.string().min(1)).min(1).required(),
 });
+
+export const isEditorEmpty = (value: any) => {
+  const mapped = value?.map((node: any) => {
+    return node?.children?.reduce(
+      (acc: any, current: any) =>
+        current?.text !== undefined
+          ? acc + current?.text
+          : acc + current?.children?.[0]?.text,
+      ''
+    );
+  });
+
+  return mapped.join('').trim() === '';
+};
