@@ -1,3 +1,5 @@
+import env from 'dotenv';
+env.config();
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import User, { IUser, ISession } from '../models/User';
@@ -20,7 +22,10 @@ const authenticateToken = async (
   }
 
   try {
-    const decoded = jwt.verify(token, 'secret') as JwtPayload;
+
+    const secret = process.env.TOKEN_SECRET;
+
+    const decoded = jwt.verify(token, secret!) as JwtPayload;
 
     const user = await User.findOne({
       _id: decoded.id,
