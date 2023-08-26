@@ -7,6 +7,7 @@ export interface State {
   singleRecipe: IRecipe | null;
   latestRecipes: IRecipe[];
   loading: boolean;
+  hasMore: boolean;
 }
 
 export const DEFAULT_STATE: State = {
@@ -14,6 +15,7 @@ export const DEFAULT_STATE: State = {
   latestRecipes: [],
   singleRecipe: null,
   loading: false,
+  hasMore: false,
 };
 
 export const recipeReducer = (state: State, action: Action<any>): State => {
@@ -22,7 +24,12 @@ export const recipeReducer = (state: State, action: Action<any>): State => {
     case types.FETCH_ALL_RECIPES:
       return { ...state, loading: true };
     case types.FETCH_ALL_RECIPES_SUCCESS:
-      return { ...state, recipes: action.payload, loading: false };
+      return {
+        ...state,
+        recipes: [...state.recipes, ...action.payload.recipes],
+        hasMore: action.payload.hasMore,
+        loading: false,
+      };
     case types.FETCH_ALL_RECIPES_FAIL:
       return { ...state, loading: false };
 

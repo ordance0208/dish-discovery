@@ -8,5 +8,6 @@ export const useRecipeData = () => {
     latestRecipes: state.latestRecipes,
     singleRecipe: state.singleRecipe || null,
     loading: state.loading,
+    hasMore: state.hasMore,
   };
 };

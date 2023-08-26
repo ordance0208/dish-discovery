@@ -9,6 +9,10 @@ import IconButton from '../../../components/IconButton';
 import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 
+interface Props {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   filtersWrapper: {
     padding: 24,
@@ -45,11 +49,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const RecipeFilters = () => {
+const RecipeFilters = ({ setPage }: Props) => {
   const classes = useStyles();
 
   const { sortOptions, search, sortBy, setSearch, setSortBy, applyFilters } =
-    useRecipeFilters();
+    useRecipeFilters(setPage);
 
   return (
     <div className={classes.filtersWrapper}>
