@@ -313,9 +313,13 @@ const SpecificRecipe = () => {
           <aside className={classes.aside}>
             <Typography className={classes.asideTitle}>Latest Posts</Typography>
             <div className={classes.latestPostsWrapper}>
-              {!isEmpty(latestRecipes) ? latestRecipes.map((post: any, index: number) => {
-                return <AsideCard key={index} recipe={post} />;
-              }) : <Typography>No recipes</Typography>}
+              {!isEmpty(latestRecipes) ? (
+                latestRecipes.map((post: any, index: number) => {
+                  return <AsideCard key={index} recipe={post} />;
+                })
+              ) : (
+                <Typography>No recipes</Typography>
+              )}
             </div>
           </aside>
         </div>
