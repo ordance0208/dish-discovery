@@ -87,6 +87,8 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
+  const { user } = useAuthData();
+
   const hasToken = localStorage.getItem('token');
 
   return (
