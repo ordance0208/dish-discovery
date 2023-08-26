@@ -33,6 +33,7 @@ const NotFound = () => {
 
   useEffect(() => {
     navigate(PATHS.NOT_FOUND, { replace: true });
+    // eslint-disable-next-line
   }, []);
 
   return (
