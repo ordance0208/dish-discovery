@@ -44,6 +44,7 @@ export const useRecipeActions = () => {
         dispatch({ type: types.FETCH_SINGLE_RECIPE_FAIL });
       }
     },
+    // eslint-disable-next-line
     [dispatch]
   );
 
