@@ -10,6 +10,14 @@ Welcome to Dish Discovery! This is a MERN stack recipe-sharing web application w
 
 ## How to Run the App
 
-Follow these steps to run the [Your Project Name] application locally:
+Follow these steps to run Dish Discovery locally:
 
-1. **Clone the Repository:** Start by cloning this repository to your local machine using the following command:
+1. **Clone the Repository:** Start by cloning this repository to your local machine using the following command: `git clone https://github.com/ordance0208/dish-discovery.git`
+2. **Navigate to the Directory:** Move into the project directory: `cd recipe-app`
+3. **Install Dependencies:** Install both server-side and client-side dependencies using the following commands: `cd server && npm install` `cd ../client && npm install`
+4. **Set Up Environment Variables:** **4.1** Create a `.env` file in the `server` directory and add necessary environment variables: `MONGO_ATLAS_URL` for MongoDB connection, `SERVER_PORT` for the port that the server will listen to and `TOKEN_SECRET` for JWT's secret.
+**4.2** Create a .env file in the client directory and add necessary environment variables: `REACT_APP_REST_API_BASE_URL` for the domain and the port of the BE server.
+5. **Run the Development Servers:** In separate terminal windows, run the development servers for the frontend and backend: `cd client && npm run start` `cd ../server && npm run dev`
+6. **Access the App:** Open your web browser and navigate to `http://localhost:3000` to access the Disc Discovery application.
+
+Feel free to explore the application and experiment with the code!
