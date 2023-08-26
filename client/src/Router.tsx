@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthActions } from './utils/AuthContext/actions';
 import { useAuthData } from './utils/AuthContext/selectors';
 import PublicRoute from './utils/PublicRoute';
@@ -18,6 +18,8 @@ const Router = () => {
   const { getCurrentUser } = useAuthActions();
   const { user } = useAuthData();
 
+  const { pathname } = useLocation();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -26,6 +28,10 @@ const Router = () => {
     }
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <Routes>
