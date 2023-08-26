@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useSigninForm from '../../../hooks/auth/useSigninForm';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { IResponse } from '../../../models/response';
 import AuthView from '../../../components/AuthView';
 import TextField from '../../../components/TextField';
@@ -36,7 +37,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const SignIn = () => {
   const classes = useStyles();
+  
+  useDocumentTitle('Sign in');
+
   const [response, setResponse] = useState<IResponse | undefined>();
+
 
   useEffect(() => {
     if (!response) return;
