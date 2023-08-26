@@ -10,7 +10,7 @@ export const userLogin = function (body: LoginFields) {
 };
 
 export const currentUser = function () {
-  return api.get('/auth/current').then((res) => res.data);
+  return api.get('/auth/session').then((res) => res.data);
 };
 
 export const userLogout = function () {
