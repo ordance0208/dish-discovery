@@ -48,7 +48,7 @@ const useUserPrivacySettings = () => {
     } catch (err: any) {
       queueSnackbar({
         text: err.response.data.error,
-        severity: 'success',
+        severity: 'error',
       });
     }
   };
@@ -60,7 +60,7 @@ const useUserPrivacySettings = () => {
     } catch (err: any) {
       queueSnackbar({
         text: 'Error logging out of all sessions!',
-        severity: 'success',
+        severity: 'error',
       });
     }
   };
@@ -73,7 +73,7 @@ const useUserPrivacySettings = () => {
     } catch (err: any) {
       queueSnackbar({
         text: 'Error deleting account!',
-        severity: 'success',
+        severity: 'error',
       });
     }
   };

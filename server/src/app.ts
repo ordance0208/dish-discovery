@@ -6,8 +6,8 @@ import authRouter from './routers/authRouter';
 import userRouter from './routers/userRouter';
 import recipeRouter from './routers/recipeRouter';
 import profileRouter from './routers/profileRouter';
-const SERVER_PORT = process.env.SERVER_PORT || 8000;
 import connectToDatabase from './db/mongoose';
+const SERVER_PORT = process.env.SERVER_PORT || 8000;
 
 const app = express();
 

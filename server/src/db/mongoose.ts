@@ -2,12 +2,11 @@ import env from 'dotenv';
 env.config();
 import mongoose from 'mongoose';
 
-// Temporary URL for connection until I get it fixed
-const MONGO_URL = 'mongodb+srv://ordan:ordan@dish-discovery.ow4nvan.mongodb.net/?retryWrites=true&w=majority'
+const MONGO_URL = process.env.MONGO_ATLAS_URL;
 
 const connectToDatabase = () => {
   mongoose
-    .connect(process.env.MONGO_URL || MONGO_URL as string)
+    .connect(process.env.MONGO_URL || (MONGO_URL as string))
     .then(() => {
       console.log('Connected to Mongo Atlas');
     })

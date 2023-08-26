@@ -1,8 +1,8 @@
+import { TEXT_DARK } from '../../theme';
 import { makeStyles } from '@mui/styles';
 import { DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import MuiDialog from '@mui/material/Dialog';
 import Button from '../Button';
-import { TEXT_DARK } from '../../theme';
 
 interface Props {
   open: boolean;

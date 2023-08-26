@@ -1,20 +1,9 @@
-import { IconButton as MuiIconButton } from '@mui/material';
+import { IconButton as MuiIconButton, IconButtonProps } from '@mui/material';
 
-interface Props {
-  children?: JSX.Element;
-  className?: string;
-	onClick?: any
-}
-
-const IconButton = ({ children, className, onClick }: Props) => {
+const IconButton = (props: IconButtonProps) => {
   return (
-    <MuiIconButton
-      className={className}
-			onClick={onClick}
-      disableFocusRipple
-      disableTouchRipple
-    >
-      {children}
+    <MuiIconButton disableFocusRipple disableTouchRipple {...props}>
+      {props.children}
     </MuiIconButton>
   );
 };

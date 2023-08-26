@@ -1,28 +1,13 @@
-import { Button as MuiButton } from '@mui/material';
+import { Button as MuiButton, ButtonProps } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { WHITE } from '../../theme';
 
-type ButtonProps = {
-  variant?: 'contained' | 'outlined' | 'text';
-  color?:
-    | 'inherit'
-    | 'secondary'
-    | 'primary'
-    | 'success'
-    | 'error'
-    | 'info'
-    | 'warning'
-    | undefined;
-  type?: 'submit' | 'reset' | 'button';
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
+interface Props extends ButtonProps {
   children?: string | React.ReactNode;
-  fullWidth?: boolean;
-  disabled?: boolean;
+  className?: string;
   textColor?: string;
   onClick?: () => any;
-  className?: string;
-};
+}
 
 interface StyleProps {
   textColor: string | undefined;
@@ -41,33 +26,25 @@ const useStyles = makeStyles({
 });
 
 const Button = ({
-  variant = 'contained',
   children,
-  color = 'primary',
-  startIcon,
-  endIcon,
-  fullWidth,
-  disabled,
-  type,
   className,
+  variant = 'contained',
+  color = 'primary',
   textColor,
   onClick,
-}: ButtonProps) => {
+  ...rest
+}: Props) => {
   const classes = useStyles({ textColor });
 
   return (
     <MuiButton
-      disableElevation
       className={`${classes.button} ${className}`}
-      fullWidth={fullWidth}
+      disableElevation
       disableRipple
-      startIcon={startIcon}
-      endIcon={endIcon}
       variant={variant}
       color={color}
-      disabled={disabled}
       onClick={onClick}
-      type={type}
+      {...rest}
     >
       {children}
     </MuiButton>

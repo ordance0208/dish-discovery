@@ -1,10 +1,12 @@
+import env from 'dotenv';
+env.config();
 import mongoose, { Document, Model } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 export interface ISession {
-  token: string,
-  _id: string
+  token: string;
+  _id: string;
 }
 
 export interface IUser extends Document {
@@ -12,7 +14,7 @@ export interface IUser extends Document {
   lastName: string;
   email: string;
   password: string;
-  bio: string,
+  bio: string;
   sessions: ISession[];
   avatar: string;
   generateAuthToken: () => string;
@@ -42,7 +44,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   bio: {
     type: String,
-    required: false
+    required: false,
   },
   avatar: String,
   sessions: [
@@ -77,7 +79,9 @@ userSchema.statics.findUserByCredentials = async (
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
 
-  const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '7d' });
+  const secret = process.env.TOKEN_SECRET;
+
+  const token = jwt.sign({ id: user._id }, secret!, { expiresIn: '7d' });
   user.sessions = user.sessions.concat({ token });
 
   await user.save();

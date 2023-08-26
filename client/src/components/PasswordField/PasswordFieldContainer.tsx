@@ -1,17 +1,13 @@
 import { useField } from 'formik';
-import PasswordField, { PasswordFieldProps } from './PasswordField';
+import { TextFieldProps } from '../TextField/TextField';
+import PasswordField from './PasswordField';
 
-interface Props extends PasswordFieldProps {
+interface Props extends TextFieldProps {
   name: string;
-  value?: string;
-  touched?: boolean;
-  error?: boolean;
-  errorText?: string;
 }
 
 const PasswordFieldContainer = ({
   name,
-  value,
   touched,
   error,
   errorText,
@@ -25,8 +21,8 @@ const PasswordFieldContainer = ({
       value={field.value}
       touched={touched || meta.touched}
       error={error || (!!meta.error && meta.touched)}
-      errorText={errorText || (meta.touched && meta.error)}			
-			onChange={field.onChange}
+      errorText={errorText || (meta.touched && meta.error)}
+      onChange={field.onChange}
       {...rest}
     />
   );

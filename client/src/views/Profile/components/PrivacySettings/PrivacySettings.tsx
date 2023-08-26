@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TEXT_DARK } from '../../../../theme';
 import useUserPrivacySettings from '../../../../hooks/settings/useUserPrivacySettings';
+import useDocumentTitle from '../../../../hooks/useDocumentTitle';
 import { PasswordPayload } from '../../../../models/user/userSettingsPayloads';
-import { IResponse } from '../../../../models/response';
 import Typography from '../../../../components/Typography';
 import PasswordField from '../../../../components/PasswordField';
 import Button from '../../../../components/Button';
 import Dialog from '../../../../components/Dialog';
-import Alert from '../../../../components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => ({
   privacySettingsContent: {
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   section: {
     marginBottom: 50,
   },
-  red: {
+  warningText: {
     fontSize: 12,
     color: 'red',
     marginBottom: 12,
@@ -45,13 +44,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   changeButton: {
     alignSelf: 'flex-start',
   },
-  alert: {
-    marginTop: 20,
-  },
 }));
 
 const PrivacySettings = () => {
   const classes = useStyles();
+
+  useDocumentTitle('Privacy Settings');
+
   const [action, setAction] = useState<'logout' | 'delete' | null>(null);
 
   const {
@@ -117,7 +116,7 @@ const PrivacySettings = () => {
         <Typography className={classes.subtitle}>
           Log out of all sessions
         </Typography>
-        <Typography className={classes.red}>
+        <Typography className={classes.warningText}>
           This action will log you out from your current session as well.
         </Typography>
         <Button color='warning' onClick={() => setAction('logout')}>
@@ -126,7 +125,7 @@ const PrivacySettings = () => {
       </div>
       <div className={classes.section}>
         <Typography className={classes.subtitle}>Delete account</Typography>
-        <Typography className={classes.red}>
+        <Typography className={classes.warningText}>
           This action will permamently delete your account and you will not be
           able to log in again.
         </Typography>
