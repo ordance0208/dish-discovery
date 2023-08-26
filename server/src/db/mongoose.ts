@@ -6,7 +6,7 @@ const MONGO_URL = process.env.MONGO_ATLAS_URL;
 
 const connectToDatabase = () => {
   mongoose
-    .connect(process.env.MONGO_URL || (MONGO_URL as string))
+    .connect(MONGO_URL as string)
     .then(() => {
       console.log('Connected to Mongo Atlas');
     })
