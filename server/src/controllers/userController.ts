@@ -1,3 +1,5 @@
+import env from 'dotenv';
+env.config();
 import fs from 'fs';
 import { Response } from 'express';
 import bcrypt from 'bcryptjs';
@@ -28,7 +30,7 @@ export const uploadAvatar = async (req: AuthRequest, res: Response) => {
   if (fileValidationError) {
     return res.status(400).send({ error: fileValidationError });
   }
-  const avatarUrl = `http://localhost:8000/${req?.file?.path}`;
+  const avatarUrl = `http://localhost:${process.env.SERVER_PORT}/${req?.file?.path}`;
   try {
     req.user.avatar = avatarUrl;
     await req.user.save();
