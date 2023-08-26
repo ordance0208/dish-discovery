@@ -1,3 +1,5 @@
+import env from 'dotenv';
+env.config();
 import { Response } from 'express';
 import multer from 'multer';
 import Recipe from '../models/Recipe';
@@ -41,7 +43,7 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
     const recipe = new Recipe({
       ...req.body,
       user: req.user._id,
-      image: `http://localhost:8000/${req?.file?.path}`,
+      image: `http://localhost:${process.env.SERVER_PORT}/${req?.file?.path}`,
     });
     await recipe.save();
     res.status(201).send(recipe);
@@ -54,7 +56,10 @@ export const createRecipe = async (req: AuthRequest, res: Response) => {
 };
 
 export const getRecipes = async (req: AuthRequest, res: Response) => {
-  const { search, sortBy } = req.query;
+  const { search, sortBy, p } = req.query;
+
+  const page = (p as any) || 1;
+  const recipePerPage = 20;
 
   let query: any = {};
   let sort: any = {};
@@ -87,11 +92,16 @@ export const getRecipes = async (req: AuthRequest, res: Response) => {
   }
 
   try {
+    const recipesCount = await Recipe.countDocuments(query);
     const recipes = await Recipe.find(query, null, {
       sort,
+      skip: (page - 1) * recipePerPage,
+      limit: recipePerPage,
     }).populate({ path: 'user' });
 
-    res.send(recipes);
+    const hasMore = page * recipePerPage < recipesCount;
+
+    res.send({ recipes, hasMore });
   } catch (err: any) {
     return res.status(500).send({ error: err.message });
   }
@@ -161,7 +171,7 @@ export const editRecipe = async (req: AuthRequest, res: Response) => {
       { _id: req.params.id },
       {
         ...req.body,
-        ...(req.file && { image: `http://localhost:8000/${req?.file?.path}` }),
+        ...(req.file && { image: `http://localhost:${process.env.SERVER_PORT}/${req?.file?.path}` }),
       },
       { new: true }
     );
