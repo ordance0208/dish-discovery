@@ -61,7 +61,8 @@ const MobileMenu = ({ menuOpened, paths, setMenuOpened }: Props) => {
     >
       <Collapse in={menuOpened} className={classes.mobileMenuContianer}>
         {paths.map(({ to, label, availableWhenLoggedIn }: Path) =>
-          !availableWhenLoggedIn && localStorage.getItem('token') ? null : (
+          (!availableWhenLoggedIn && localStorage.getItem('token')) ||
+          (availableWhenLoggedIn && !localStorage.getItem('token')) ? null : (
             <div
               className={classes.mobileMenuLinks}
               onClick={() => setMenuOpened(false)}
