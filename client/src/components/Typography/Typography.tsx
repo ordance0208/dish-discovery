@@ -1,12 +1,7 @@
-import { Typography as MuiTypography } from '@mui/material';
+import { Typography as MuiTypography, TypographyProps } from '@mui/material';
 
-interface Props {
-  children?: any;
-  className?: string;
-}
-
-const Typography = ({ children, className }: Props) => {
-  return <MuiTypography className={className}>{children}</MuiTypography>;
+const Typography = (props: TypographyProps) => {
+  return <MuiTypography {...props}>{props.children}</MuiTypography>;
 };
 
 export default Typography;

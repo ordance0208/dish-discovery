@@ -24,7 +24,7 @@ const useSnackbar = () => {
         return (
           <Snackbar
             key={key}
-            message={message}
+            message={message as string}
             severity={severity}
             onClose={() => closeSnackbar(key)}
           />

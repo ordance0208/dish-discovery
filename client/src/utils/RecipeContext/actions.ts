@@ -16,10 +16,10 @@ export const useRecipeActions = () => {
   const { dispatch } = useRecipeContext();
 
   const fetchAllRecipes = useCallback(
-    async (query?: string, sortBy?: string) => {
+    async (query?: string, sortBy?: string, page?: string) => {
       dispatch({ type: types.FETCH_ALL_RECIPES });
       try {
-        const data = await getAllRecipes(query, sortBy);
+        const data = await getAllRecipes(query, sortBy, page);
         dispatch({ type: types.FETCH_ALL_RECIPES_SUCCESS, payload: data });
       } catch (err: any) {
         dispatch({ type: types.FETCH_ALL_RECIPES_FAIL });

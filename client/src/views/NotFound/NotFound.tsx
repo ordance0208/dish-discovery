@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { PATHS } from '../../routes';
 import { UilLinkBroken } from '@iconscout/react-unicons';
 import Typography from '../../components/Typography';
-import { PATHS } from '../../routes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   text: {
     fontSize: 20,
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 18,
+      padding: 16
+    }
   },
 }));
 

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
+import { ClickAwayListener, Collapse, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Collapse, Theme } from '@mui/material';
 
 type Path = {
   label: string;
@@ -39,8 +39,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   mobileMenuContianer: {
-    position: 'absolute',
-    top: '100%',
+    position: 'fixed',
+    top: 71,
     left: 0,
     zIndex: 1500,
     width: '100%',
@@ -51,21 +51,31 @@ const MobileMenu = ({ menuOpened, paths, setMenuOpened }: Props) => {
   const classes = useStyles();
 
   return (
-    <Collapse in={menuOpened} className={classes.mobileMenuContianer}>
-      {paths.map(({ to, label, availableWhenLoggedIn }: Path) =>
-        !availableWhenLoggedIn && localStorage.getItem('token') ? null : (
-          <div
-            className={classes.mobileMenuLinks}
-            onClick={() => setMenuOpened(false)}
-            key={to}
-          >
-            <Link to={to}>
-              {label.charAt(0).toUpperCase() + label.substring(1)}
-            </Link>
-          </div>
-        )
-      )}
-    </Collapse>
+    <ClickAwayListener
+      onClickAway={(e: any) => {
+        const isHamburgerButton = e?.srcElement?.id === 'hamburger-button';
+        if (isHamburgerButton) return;
+        setMenuOpened(false);
+      }}
+      mouseEvent='onMouseDown'
+    >
+      <Collapse in={menuOpened} className={classes.mobileMenuContianer}>
+        {paths.map(({ to, label, availableWhenLoggedIn }: Path) =>
+          (!availableWhenLoggedIn && localStorage.getItem('token')) ||
+          (availableWhenLoggedIn && !localStorage.getItem('token')) ? null : (
+            <div
+              className={classes.mobileMenuLinks}
+              onClick={() => setMenuOpened(false)}
+              key={to}
+            >
+              <Link to={to}>
+                {label.charAt(0).toUpperCase() + label.substring(1)}
+              </Link>
+            </div>
+          )
+        )}
+      </Collapse>
+    </ClickAwayListener>
   );
 };
 

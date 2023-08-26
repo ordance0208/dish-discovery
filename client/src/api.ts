@@ -1,8 +1,8 @@
 import axios from 'axios';
-const DEV_REST_API_URL = 'http://localhost:8000';
+const restApiBaseUrl = process.env.REACT_APP_REST_API_BASE_URL;
 
 const api = axios.create({
-  baseURL: `${DEV_REST_API_URL}/api`,
+  baseURL: `${restApiBaseUrl}/api`,
 });
 
 api.interceptors.request.use((config) => {

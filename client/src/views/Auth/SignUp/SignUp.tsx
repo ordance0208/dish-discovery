@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import useSignupForm from '../../../hooks/auth/useSignupForm';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { IResponse } from '../../../models/response';
 import TextField from '../../../components/TextField';
 import PasswordField from '../../../components/PasswordField';
@@ -27,13 +28,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   name: {
     flex: 1,
   },
-  haveAccount: {
+  userRegisteredText: {
     fontSize: 14,
     fontWeight: 600,
     textAlign: 'center',
     color: '#333',
   },
-  signinLink: {
+  signInLink: {
     textDecoration: 'none',
     fontSize: 14,
     fontWeight: 600,
@@ -47,7 +48,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const SignUp = () => {
   const classes = useStyles();
 
-  
+  useDocumentTitle('Sign up');
+
   const [response, setResponse] = useState<IResponse | undefined>();
 
   useEffect(() => {
@@ -57,8 +59,9 @@ const SignUp = () => {
       setResponse(undefined);
     }, 5000);
   }, [response]);
-  
-  const { initialValues, validationSchema, handleSignup } = useSignupForm(setResponse);
+
+  const { initialValues, validationSchema, handleSignup } =
+    useSignupForm(setResponse);
 
   return (
     <AuthView
@@ -99,9 +102,9 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            <Typography className={classes.haveAccount}>
+            <Typography className={classes.userRegisteredText}>
               Already have an account?{' '}
-              <Link to='/login' className={classes.signinLink}>
+              <Link to='/login' className={classes.signInLink}>
                 Log in
               </Link>
             </Typography>

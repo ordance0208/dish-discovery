@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { makeStyles } from '@mui/styles';
 import { NEUTRAL } from '../../theme';
-import { ClickAwayListener, Popover } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { ClickAwayListener, Popover, PopoverProps } from '@mui/material';
 import Typography from '../../components/Typography';
 
 export type Option = {
@@ -10,19 +10,9 @@ export type Option = {
   icon?: JSX.Element;
 };
 
-interface Props {
-  open: boolean;
-  anchorEl: HTMLElement | null;
+interface Props extends PopoverProps {
   children?: JSX.Element | JSX.Element[];
   className?: string;
-  anchorOrigin?: {
-    vertical: 'bottom' | 'center' | 'top';
-    horizontal: 'center' | 'left' | 'right';
-  };
-  transformOrigin?: {
-    vertical: 'bottom' | 'center' | 'top';
-    horizontal: 'center' | 'left' | 'right';
-  };
   options?: Option[];
   overrideRenderOptions?: (item: Option) => JSX.Element;
   onOptionClick?: (item: Option) => void;
@@ -33,7 +23,7 @@ const useStyles = makeStyles({
   root: {
     borderRadius: 4,
   },
-  try: {
+  paperRoot: {
     '& .MuiPaper-root': {
       marginTop: 10,
       boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 12px 0px',
@@ -55,16 +45,13 @@ const useStyles = makeStyles({
 });
 
 const Dropdown = ({
-  open,
   children,
   className,
-  anchorEl,
-  anchorOrigin,
-  transformOrigin,
   options,
   overrideRenderOptions,
   onOptionClick,
   onClose,
+  ...rest
 }: Props) => {
   const classes = useStyles();
 
@@ -84,13 +71,10 @@ const Dropdown = ({
   return (
     <ClickAwayListener onClickAway={onClose} mouseEvent='onMouseDown'>
       <Popover
-        classes={{ root: classes.try }}
+        classes={{ root: classes.paperRoot }}
         className={clsx(classes.root, className ? className : null)}
-        open={open}
         onClose={onClose}
-        anchorEl={anchorEl}
-        anchorOrigin={anchorOrigin}
-        transformOrigin={transformOrigin}
+        {...rest}
       >
         {options
           ? options.map((option: Option) =>

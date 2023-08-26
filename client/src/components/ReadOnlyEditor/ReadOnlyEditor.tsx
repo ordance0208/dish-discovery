@@ -25,18 +25,11 @@ const Editor = ({ editorValue }: Props) => {
   const classes = useStyles();
 
   const [editor] = useState(() => withReact(createEditor()));
-  const [value, setValue] = useState(editorValue || initialValue);
 
   return (
     <div>
       <div>
-        <Slate
-          editor={editor}
-          initialValue={value}
-          onChange={(newValue: any) => {
-            setValue(newValue);
-          }}
-        >
+        <Slate editor={editor} initialValue={editorValue || initialValue}>
           <Editable
             readOnly
             className={classes.editable}

@@ -12,8 +12,10 @@ import { Theme, useTheme } from '@mui/material';
 import { TEXT_DARK } from '../../theme';
 import { makeStyles } from '@mui/styles';
 import useSubmitRecipe from '../../hooks/recipe/useSubmitRecipe';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { isEditorEmpty } from '../../utils/editor.helpers';
 import { RecipeFields } from '../../models/recipe/recipePayload';
+import { Descendant } from 'slate';
 import { PATHS } from '../../routes';
 import { UilPlus, UilTimes, UilCheckCircle } from '@iconscout/react-unicons';
 import Typography from '../../components/Typography';
@@ -99,9 +101,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 const RecipeSubmit = () => {
   const theme = useTheme();
   const classes = useStyles();
-  
+
   const { id } = useParams();
   const navigate = useNavigate();
+
+  useDocumentTitle(id ? 'Edit recipe' : 'Submit a recipe');
 
   const [file, setFile] = useState<File | null>(null);
   const [recipeSubmitted, setRecipeSubmitted] = useState<string | null>(null);
@@ -158,14 +162,14 @@ const RecipeSubmit = () => {
                       error={isEditorEmpty(props.values.description)}
                       touched={props.submitCount > 0}
                       editorValue={props.values.description}
-                      validate={(value: any) => {
+                      validate={(value: Descendant[]) => {
                         if (isEditorEmpty(value)) {
                           return 'Enter recipe description';
                         }
                       }}
                     />
                     <FieldArray name='ingredients'>
-                      {({ push, remove, form }: FieldArrayRenderProps) => {
+                      {({ push, remove }: FieldArrayRenderProps) => {
                         return (
                           <div>
                             <Typography

@@ -4,6 +4,7 @@ import { Divider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
 import useProfile from '../../hooks/profile/useProfile';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { PATHS } from '../../routes';
 import AsideCard from '../../components/AsideCard';
 import Button from '../../components/Button';
@@ -15,7 +16,8 @@ import defaultAvatar from '../../assets/img/default-avatar.png';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     maxWidth: 1440,
-    marginTop: 64,
+    marginTop: 32,
+    marginBottom: 32,
     margin: 'auto',
     [theme.breakpoints.down('xl')]: {
       width: '90%',
@@ -102,9 +104,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const { profile, loading } = useProfile();
 
+  useDocumentTitle(`${profile?.firstName} ${profile?.lastName}`);
+
   return (
     <div className={classes.root}>
-      {loading ? (
+      {loading || (!loading && !profile) ? (
         <ProfileSkeleton />
       ) : (
         <div className={classes.profileSection}>

@@ -4,10 +4,10 @@ import { makeStyles } from '@mui/styles';
 import useProfileDropdown from '../../hooks/useProfileDropdown';
 import { useAuthData } from '../../utils/AuthContext/selectors';
 import { useAuthActions } from '../../utils/AuthContext/actions';
-import { Option } from '../Dropdown/Dropdown';
 import { DropdownOptions } from '../../models/profileDropdown';
 import { AUTH_PATHS, PATHS } from '../../routes';
 import { UilAngleDown, UilAngleUp } from '@iconscout/react-unicons';
+import { Option } from '../Dropdown/Dropdown';
 import Dropdown from '../Dropdown';
 import defaultAvatar from '../../assets/img/default-avatar.png';
 
