@@ -19,7 +19,6 @@ const useProfile = () => {
   const queueSnackbar = useSnackbar();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const getProfile = async () => {
       try {
         const data = await getUserProfile(id);
