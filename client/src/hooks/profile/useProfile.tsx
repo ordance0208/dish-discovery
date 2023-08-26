@@ -47,6 +47,7 @@ const useProfile = () => {
     };
 
     getProfile();
+    // eslint-disable-next-line
   }, [pathname]);
 
   return { profile, loading };

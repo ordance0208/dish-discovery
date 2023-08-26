@@ -24,6 +24,7 @@ const useRecipeFilters = (
 
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line
   }, [sortBy]);
 
   const applyFilters = async (clearSearch?: boolean) => {
@@ -38,7 +39,7 @@ const useRecipeFilters = (
     navigate(`?${queryParams.toString()}`);
     if (initial) return setInitial(false);
     resetAllRecipes();
-    setPage(1)
+    setPage(1);
   };
 
   return {

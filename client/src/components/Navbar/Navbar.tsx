@@ -87,6 +87,7 @@ const Navbar = () => {
   const classes = useStyles();
   const [menuOpened, setmenuOpened] = useState<boolean>(false);
 
+  // eslint-disable-next-line
   const { user } = useAuthData();
 
   const hasToken = localStorage.getItem('token');

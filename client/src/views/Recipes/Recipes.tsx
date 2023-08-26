@@ -78,6 +78,7 @@ const Recipes = () => {
     return () => {
       resetAllRecipes();
     };
+    // eslint-disable-next-line
   }, []);
 
   return (
