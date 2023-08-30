@@ -10,7 +10,7 @@ import Select from '../../../components/Select';
 import Button from '../../../components/Button';
 
 interface Props {
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -58,7 +58,7 @@ const RecipeFilters = ({ setPage }: Props) => {
   return (
     <div className={classes.filtersWrapper}>
       <div className={classes.searchWrapper}>
-        <TextField          
+        <TextField
           className={classes.textField}
           InputProps={{
             endAdornment: (
@@ -87,7 +87,13 @@ const RecipeFilters = ({ setPage }: Props) => {
             }
           }}
         />
-        <Button className={classes.searchButton} onClick={() => applyFilters()}>
+        <Button
+          className={classes.searchButton}
+          onClick={() => {
+            if (!search) return;
+            applyFilters();
+          }}
+        >
           <UilSearch />
         </Button>
       </div>

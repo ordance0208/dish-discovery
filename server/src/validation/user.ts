@@ -4,7 +4,7 @@ export const personalInfoPayloadSchema = Joi.object({
   firstName: Joi.string().min(2).max(20).required(),
   lastName: Joi.string().min(2).max(20).required(),
   email: Joi.string().email().required(),
-  bio: Joi.string().min(1).max(320),
+  bio: Joi.string().min(0).max(320),
 });
 
 export const userPasswordPayload = Joi.object({
